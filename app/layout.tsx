@@ -126,14 +126,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fi" suppressHydrationWarning>
-      <head>
-        <StructuredData />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-950 text-slate-200`}
       >
         <ThemeProvider>
           <LocaleProvider>
+            <StructuredData />
             {children}
           </LocaleProvider>
         </ThemeProvider>
