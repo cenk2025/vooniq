@@ -46,17 +46,18 @@ export function ServicesSection() {
     ];
 
     return (
-        <section id="services" className="relative py-20 md:py-32 overflow-hidden">
+        <section id="services" className="relative py-24 md:py-40 overflow-hidden">
             {/* Background */}
-            <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950" />
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-950/50 via-purple-950/20 to-slate-950/50" />
+            <div className="absolute inset-0 grid-pattern opacity-20" />
 
             <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Section header */}
-                <div className="text-center max-w-3xl mx-auto mb-16 fade-in">
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                <div className="text-center max-w-4xl mx-auto mb-20 fade-in-up">
+                    <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 gradient-text-vibrant">
                         {t('services_title') as string}
                     </h2>
-                    <p className="text-lg md:text-xl text-slate-300">
+                    <p className="text-xl md:text-2xl lg:text-3xl text-slate-200 font-light leading-relaxed">
                         {t('services_subtitle') as string}
                     </p>
                 </div>
@@ -68,29 +69,31 @@ export function ServicesSection() {
                         return (
                             <div
                                 key={idx}
-                                className="glass p-6 lg:p-8 rounded-xl hover:bg-slate-800/70 transition-all duration-300 group fade-in"
+                                className="glass-strong p-8 lg:p-10 rounded-2xl hover:scale-105 transition-all duration-300 group cursor-pointer fade-in-up"
                                 style={{ animationDelay: `${idx * 0.1}s` }}
                             >
                                 {/* Icon */}
-                                <div className="w-14 h-14 bg-gradient-to-br from-blue-600/20 to-cyan-600/20 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-                                    <service.Icon className="w-7 h-7 text-cyan-400" />
+                                <div className="w-16 h-16 bg-gradient-to-br from-indigo-600/40 to-purple-600/40 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300 neon-glow-purple">
+                                    <service.Icon className="w-8 h-8 text-indigo-200" />
                                 </div>
 
                                 {/* Title */}
-                                <h3 className="text-xl font-bold text-white mb-3">
+                                <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-indigo-200 transition-colors">
                                     {t(service.titleKey) as string}
                                 </h3>
 
                                 {/* Description */}
-                                <p className="text-slate-400 mb-4 leading-relaxed">
+                                <p className="text-slate-300 mb-6 leading-relaxed text-base">
                                     {t(service.bodyKey) as string}
                                 </p>
 
                                 {/* Bullets */}
-                                <ul className="space-y-2">
+                                <ul className="space-y-3">
                                     {bullets.map((bullet, bulletIdx) => (
-                                        <li key={bulletIdx} className="flex items-start space-x-2 text-sm text-slate-300">
-                                            <Icons.check className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+                                        <li key={bulletIdx} className="flex items-start space-x-3 text-sm text-slate-300">
+                                            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                <Icons.check className="w-3 h-3 text-white" />
+                                            </div>
                                             <span>{bullet}</span>
                                         </li>
                                     ))}
