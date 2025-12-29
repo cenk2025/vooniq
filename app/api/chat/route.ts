@@ -1,11 +1,5 @@
-import { OpenAIStream, StreamingTextResponse } from 'ai';
-import { Configuration, OpenAIApi } from 'openai-edge';
-
-// Create an OpenAI API client (edge-compatible)
-const config = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(config);
+import { openai } from '@ai-sdk/openai';
+import { streamText } from 'ai';
 
 // Set the runtime to edge for best performance
 export const runtime = 'edge';
@@ -35,10 +29,9 @@ export async function POST(req: Request) {
     try {
         const { messages } = await req.json();
 
-        // Ask OpenAI for a streaming chat completion given the prompt
-        const response = await openai.createChatCompletion({
-            model: 'gpt-4o-mini',
-            stream: true,
+        // Use the new AI SDK v4 streamText API
+        const result = streamText({
+            model: openai('gpt-4o-mini'),
             messages: [
                 {
                     role: 'system',
@@ -47,14 +40,11 @@ export async function POST(req: Request) {
                 ...messages,
             ],
             temperature: 0.7,
-            max_tokens: 500,
+            maxTokens: 500,
         });
 
-        // Convert the response into a friendly text-stream
-        const stream = OpenAIStream(response);
-
-        // Respond with the stream
-        return new StreamingTextResponse(stream);
+        // Return the stream response
+        return result.toDataStreamResponse();
     } catch (error) {
         console.error('Chat API error:', error);
         return new Response('Error processing chat request', { status: 500 });
