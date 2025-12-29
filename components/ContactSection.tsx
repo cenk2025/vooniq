@@ -8,13 +8,57 @@ export function ContactSection() {
     const { t } = useLocale();
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setStatus('loading');
 
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        setStatus('success');
+        // Store form reference before async operations
+        const form = e.currentTarget;
+
+        try {
+            // Get form data
+            const formData = new FormData(form);
+            const data = {
+                company: formData.get('company') as string,
+                name: formData.get('name') as string,
+                email: formData.get('email') as string,
+                need: formData.get('need') as string,
+                message: formData.get('message') as string,
+            };
+
+            // Send to our secure API route
+            const response = await fetch('/api/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to send email');
+            }
+
+            setStatus('success');
+
+            // Reset form safely
+            if (form) {
+                form.reset();
+            }
+
+            // Reset success state after 5 seconds
+            setTimeout(() => {
+                setStatus('idle');
+            }, 5000);
+        } catch (error) {
+            console.error('Error sending email:', error);
+            setStatus('error');
+
+            // Reset error state after 3 seconds
+            setTimeout(() => {
+                setStatus('idle');
+            }, 3000);
+        }
     };
 
     const needs = t('form_need_options') as string[];
@@ -65,7 +109,16 @@ export function ContactSection() {
                                 <div className="w-20 h-20 rounded-full bg-green-500/10 flex items-center justify-center text-green-500 mx-auto mb-6">
                                     <Icons.check className="w-10 h-10" />
                                 </div>
-                                <h3 className="text-2xl font-bold text-white mb-4">{t('form_success') as string}</h3>
+                                <h3 className="text-2xl font-bold text-white mb-3">{t('form_success') as string}</h3>
+                                <p className="text-slate-400 text-lg">{t('form_success_subtitle') as string}</p>
+                            </div>
+                        ) : status === 'error' ? (
+                            <div className="py-12 text-center">
+                                <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 mx-auto mb-6">
+                                    <Icons.alertCircle className="w-10 h-10" />
+                                </div>
+                                <h3 className="text-2xl font-bold text-white mb-3">{t('form_error') as string}</h3>
+                                <p className="text-slate-400">{t('form_error_subtitle') as string}</p>
                             </div>
                         ) : (
                             <form onSubmit={handleSubmit} className="space-y-6">
@@ -74,14 +127,14 @@ export function ContactSection() {
                                         <label className="text-sm font-semibold text-slate-300 ml-1">{t('form_company') as string}</label>
                                         <div className="relative">
                                             <Icons.building className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                                            <input required type="text" className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="Voon Oy" />
+                                            <input name="company" required type="text" className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="Voon Oy" />
                                         </div>
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-sm font-semibold text-slate-300 ml-1">{t('form_name') as string}</label>
                                         <div className="relative">
                                             <Icons.user className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                                            <input required type="text" className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="Cenk Yakinlar" />
+                                            <input name="name" required type="text" className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="Cenk Yakinlar" />
                                         </div>
                                     </div>
                                 </div>
@@ -90,13 +143,13 @@ export function ContactSection() {
                                     <label className="text-sm font-semibold text-slate-300 ml-1">{t('form_email') as string}</label>
                                     <div className="relative">
                                         <Icons.mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                                        <input required type="email" className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="hello@example.com" />
+                                        <input name="email" required type="email" className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="hello@example.com" />
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
                                     <label className="text-sm font-semibold text-slate-300 ml-1">{t('form_need') as string}</label>
-                                    <select className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-4 px-4 text-white focus:outline-none focus:border-blue-500 transition-colors appearance-none cursor-pointer">
+                                    <select name="need" required className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-4 px-4 text-white focus:outline-none focus:border-blue-500 transition-colors appearance-none cursor-pointer">
                                         {needs.map((need, i) => (
                                             <option key={i} value={need}>{need}</option>
                                         ))}
@@ -105,7 +158,7 @@ export function ContactSection() {
 
                                 <div className="space-y-2">
                                     <label className="text-sm font-semibold text-slate-300 ml-1">{t('form_message') as string}</label>
-                                    <textarea rows={4} className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-4 px-4 text-white focus:outline-none focus:border-blue-500 transition-colors resize-none" placeholder="..." />
+                                    <textarea name="message" rows={4} className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-4 px-4 text-white focus:outline-none focus:border-blue-500 transition-colors resize-none" placeholder="..." />
                                 </div>
 
                                 <button
