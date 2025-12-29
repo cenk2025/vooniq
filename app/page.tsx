@@ -11,6 +11,7 @@ import { ContactSection } from '@/components/ContactSection';
 import { FAQSection } from '@/components/FAQSection';
 import { Footer } from '@/components/Footer';
 import { CookieConsent } from '@/components/CookieConsent';
+import Chatbot from '@/components/Chatbot';
 
 export default function Home() {
   return (
@@ -34,6 +35,7 @@ export default function Home() {
 
       <Footer />
       <CookieConsent />
+      <Chatbot />
 
       {/* Global backgrounds */}
       <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
