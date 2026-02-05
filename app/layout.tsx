@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Caveat } from "next/font/google"; // Added Caveat
 import "./globals.css";
 
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -13,6 +13,11 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const caveat = Caveat({
+  variable: "--font-caveat",
   subsets: ["latin"],
 });
 
@@ -127,7 +132,7 @@ export default function RootLayout({
   return (
     <html lang="fi" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-950 text-slate-200`}
+        className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} antialiased bg-slate-950 text-slate-200`}
       >
         <ThemeProvider>
           <LocaleProvider>
