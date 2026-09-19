@@ -8,100 +8,81 @@ export function ServicesSection() {
     const { t } = useLocale();
 
     const services = [
-        {
-            titleKey: 'svc_1_title',
-            bodyKey: 'svc_1_body',
-            bulletsKey: 'svc_1_bullets',
-            Icon: Icons.brain,
-        },
-        {
-            titleKey: 'svc_2_title',
-            bodyKey: 'svc_2_body',
-            bulletsKey: 'svc_2_bullets',
-            Icon: Icons.workflow,
-        },
-        {
-            titleKey: 'svc_3_title',
-            bodyKey: 'svc_3_body',
-            bulletsKey: 'svc_3_bullets',
-            Icon: Icons.lock,
-        },
-        {
-            titleKey: 'svc_4_title',
-            bodyKey: 'svc_4_body',
-            bulletsKey: 'svc_4_bullets',
-            Icon: Icons.barChart,
-        },
+        { titleKey: 'svc_1_title', bodyKey: 'svc_1_body', Icon: Icons.brain, color: 'bg-grape text-cream' },
+        { titleKey: 'svc_2_title', bodyKey: 'svc_2_body', Icon: Icons.workflow, color: 'bg-flame text-cream' },
+        { titleKey: 'svc_3_title', bodyKey: 'svc_3_body', Icon: Icons.lock, color: 'bg-sun text-ink' },
+        { titleKey: 'svc_4_title', bodyKey: 'svc_4_body', Icon: Icons.barChart, color: 'bg-hot text-cream' },
     ];
 
     return (
-        <section id="services" className="relative py-24 md:py-32 bg-white text-slate-900 overflow-hidden">
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section
+            id="services"
+            className="relative mt-24 md:mt-32 mx-2 md:mx-4 rounded-[2rem] md:rounded-[3.5rem] bg-blush text-ink py-16 md:py-28 overflow-hidden"
+        >
+            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+                <div className="flex flex-col lg:flex-row gap-14 lg:gap-20 items-start">
 
-                <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
-
-                    {/* Left: Sticky Text Content */}
-                    <div className="lg:sticky lg:top-32 lg:w-1/2 space-y-8 fade-in-up">
-                        {/* Accent Text like the reference */}
-                        <div className="inline-flex items-center space-x-2 font-bold text-emerald-600 tracking-wide uppercase text-sm">
-                            <Icons.sparkles className="w-5 h-5" />
+                    {/* Left: sticky text */}
+                    <div className="lg:sticky lg:top-32 lg:w-1/2 space-y-8">
+                        <div className="inline-flex items-center gap-2 rounded-full bg-ink text-lime px-4 py-2 font-bold tracking-wide uppercase text-xs md:text-sm">
+                            <Icons.sparkles className="w-4 h-4" />
                             <span>GenAI Advances Daily</span>
                         </div>
 
-                        <h2 className="text-5xl sm:text-6xl md:text-7xl font-black leading-[1.05] tracking-tight">
-                            AI Changing<br />
-                            <span className="text-slate-900">Software</span><br />
-                            <span className="font-caveat text-emerald-500 block transform rotate-[-2deg] mt-2">Development</span>
+                        <h2 className="font-display font-semibold leading-[0.95] tracking-tight text-5xl sm:text-6xl md:text-7xl">
+                            <span className="block mb-3">AI Changing</span>
+                            <span className="inline-block rounded-[1.25rem] md:rounded-[1.75rem] bg-ink text-cream px-5 md:px-7 pt-1 pb-2.5 md:pb-3.5 mb-3">Software</span>
+                            <br />
+                            <span className="inline-block rounded-[1.25rem] md:rounded-[1.75rem] bg-hot text-cream px-5 md:px-7 pt-1 pb-2.5 md:pb-3.5 -rotate-2">Development</span>
                         </h2>
 
-                        <p className="text-xl text-slate-600 leading-relaxed max-w-lg">
+                        <p className="text-lg md:text-xl leading-relaxed max-w-lg text-ink/75">
                             {t('services_subtitle') as string || "AI's ability to automate complex tasks is evolving at a dizzying pace. We help you stay ahead."}
                         </p>
 
-                        <div className="pt-4">
-                            <a href="#contact" className="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-200 bg-slate-900 border border-transparent rounded-full hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 hover:scale-105 shadow-xl">
-                                Explore Solutions
-                            </a>
-                        </div>
+                        <a
+                            href="#contact"
+                            className="btn-pop inline-flex items-center gap-2 px-8 py-4 text-base md:text-lg font-bold text-cream bg-ink rounded-full hover:bg-lime hover:text-ink focus-visible-ring"
+                        >
+                            Explore Solutions
+                            <Icons.arrowRight className="w-5 h-5" />
+                        </a>
                     </div>
 
-                    {/* Right: Service Cards / Orchestra Image aesthetic */}
-                    <div className="lg:w-1/2 space-y-8 w-full">
-                        {/* Featured "Orchestra" Card equivalent */}
-                        <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-slate-900 aspect-video group cursor-pointer hover:scale-[1.02] transition-transform duration-500">
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent z-10 opactiy-80" />
-                            {/* Use the conductor image here too as a reference to the theme, or a different one */}
+                    {/* Right: featured image + service cards */}
+                    <div className="lg:w-1/2 space-y-4 md:space-y-5 w-full">
+                        <div className="relative rounded-[2rem] overflow-hidden bg-ink aspect-video group">
                             <Image
                                 src="/hero-conductor.png"
                                 alt="AI Orchestra"
                                 fill
-                                className="object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+                                sizes="(min-width: 1024px) 50vw, 100vw"
+                                className="object-cover transition-transform duration-700 group-hover:scale-105"
                             />
-                            <div className="absolute bottom-0 left-0 p-8 z-20">
-                                <div className="flex items-center space-x-4 mb-3">
-                                    <div className="w-12 h-12 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold">AI</div>
-                                    <div>
-                                        <p className="text-white font-bold text-lg">AI-Powered Teams</p>
-                                        <p className="text-emerald-400 text-sm">Machine Learning Engineers</p>
-                                    </div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent" />
+                            <div className="absolute bottom-0 left-0 p-5 md:p-7 flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-2xl bg-lime text-ink flex items-center justify-center font-display font-extrabold -rotate-6">AI</div>
+                                <div>
+                                    <p className="text-cream font-display font-semibold text-xl">AI-Powered Teams</p>
+                                    <p className="text-lime text-sm">Machine Learning Engineers</p>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Service Grid below */}
-                        <div className="grid sm:grid-cols-2 gap-6 pt-8">
+                        <div className="grid sm:grid-cols-2 gap-4 md:gap-5">
                             {services.map((service, idx) => (
                                 <div
                                     key={idx}
-                                    className="p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:border-emerald-200 hover:shadow-lg transition-all duration-300 group"
+                                    className={`rounded-[1.75rem] p-6 md:p-7 transition-transform duration-300 hover:-translate-y-1.5 ${idx % 2 ? 'hover:rotate-1' : 'hover:-rotate-1'} ${service.color}`}
                                 >
-                                    <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center mb-4 text-emerald-600 group-hover:scale-110 transition-transform">
-                                        <service.Icon className="w-6 h-6" />
+                                    <div className="flex items-center justify-between mb-8">
+                                        <service.Icon className="w-9 h-9" />
+                                        <span className="font-display font-extrabold text-xl opacity-60">0{idx + 1}</span>
                                     </div>
-                                    <h3 className="text-xl font-bold text-slate-900 mb-2">
+                                    <h3 className="font-display text-xl md:text-2xl font-semibold leading-tight mb-3">
                                         {t(service.titleKey) as string}
                                     </h3>
-                                    <p className="text-slate-500 text-sm leading-relaxed">
+                                    <p className="text-sm md:text-[0.95rem] leading-relaxed opacity-90">
                                         {t(service.bodyKey) as string}
                                     </p>
                                 </div>

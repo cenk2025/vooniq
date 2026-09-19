@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useLocale } from './LocaleProvider';
-import { Icons } from './Icons';
 
 export function FAQSection() {
     const { t } = useLocale();
@@ -16,40 +15,50 @@ export function FAQSection() {
     ];
 
     return (
-        <section className="py-24 relative">
-            <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+        <section id="faq" className="pt-24 md:pt-36 pb-24 md:pb-36 relative">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="text-center mb-12 md:mb-16">
+                    <h2 className="font-display font-semibold tracking-tight leading-[0.95] text-5xl md:text-7xl">
                         {t('faq_title') as string}
                     </h2>
                 </div>
 
-                <div className="space-y-4">
-                    {faqs.map((faq, index) => (
-                        <div key={index} className="glass rounded-2xl border border-slate-800 overflow-hidden transition-all duration-300">
-                            <button
-                                onClick={() => setOpenIndex(index === openIndex ? null : index)}
-                                className="w-full p-6 text-left flex items-center justify-between group"
-                            >
-                                <span className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">
-                                    {faq.q as string}
-                                </span>
-                                <Icons.chevronDown
-                                    className={`w-5 h-5 text-slate-500 transform transition-transform duration-300 ${openIndex === index ? 'rotate-180 text-blue-500' : ''
-                                        }`}
-                                />
-                            </button>
-
+                <div className="space-y-3 md:space-y-4">
+                    {faqs.map((faq, index) => {
+                        const isOpen = openIndex === index;
+                        return (
                             <div
-                                className={`transition-all duration-300 ease-in-out ${openIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                                    }`}
+                                key={index}
+                                className={`rounded-[1.75rem] md:rounded-[2rem] overflow-hidden transition-colors duration-300 ${isOpen ? 'bg-sun text-ink' : 'bg-card border-2 border-line hover:border-fg/60'}`}
                             >
-                                <div className="p-6 pt-0 text-slate-400 leading-relaxed border-t border-slate-800/50">
-                                    {faq.a as string}
+                                <button
+                                    onClick={() => setOpenIndex(isOpen ? null : index)}
+                                    aria-expanded={isOpen}
+                                    className="w-full px-6 md:px-8 py-5 md:py-6 text-left flex items-center justify-between gap-4 focus-visible-ring rounded-[inherit]"
+                                >
+                                    <span className="font-display text-lg md:text-2xl font-semibold leading-snug">
+                                        {faq.q as string}
+                                    </span>
+                                    <span
+                                        aria-hidden="true"
+                                        className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-2xl font-bold leading-none transition-transform duration-300 ${isOpen ? 'rotate-45 bg-ink text-sun' : 'bg-hot text-cream'}`}
+                                    >
+                                        +
+                                    </span>
+                                </button>
+
+                                <div
+                                    className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+                                >
+                                    <div className="overflow-hidden">
+                                        <p className="px-6 md:px-8 pb-6 md:pb-7 text-base md:text-lg leading-relaxed opacity-85">
+                                            {faq.a as string}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             </div>
         </section>

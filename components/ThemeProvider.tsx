@@ -14,7 +14,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-    const [themeMode, setThemeModeState] = useState<ThemeMode>('auto');
+    const [themeMode, setThemeModeState] = useState<ThemeMode>('dark');
     const [theme, setTheme] = useState<Theme>('dark');
 
     useEffect(() => {
@@ -48,11 +48,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
             const newTheme = determineTheme();
             setTheme(newTheme);
 
-            if (newTheme === 'dark') {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
+            document.documentElement.classList.toggle('dark', newTheme === 'dark');
+            document.documentElement.classList.toggle('light', newTheme === 'light');
         };
 
         updateTheme();

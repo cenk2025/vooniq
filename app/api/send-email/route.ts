@@ -4,6 +4,10 @@ import { Resend } from 'resend';
 // Initialize Resend with API key from environment variable (secure!)
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+// Set RESEND_FROM to an address on a domain verified in Resend (e.g. "Voon IQ <info@voon.fi>").
+// Without it we fall back to Resend's shared sandbox sender, which is likely to land in spam.
+const FROM_ADDRESS = process.env.RESEND_FROM || 'Voon IQ <onboarding@resend.dev>';
+
 export async function POST(request: NextRequest) {
     try {
         // Parse request body
@@ -20,7 +24,7 @@ export async function POST(request: NextRequest) {
 
         // Send email using Resend
         const { data, error } = await resend.emails.send({
-            from: 'Voon IQ <onboarding@resend.dev>', // You can customize this later with your domain
+            from: FROM_ADDRESS,
             to: 'info@voon.fi',
             replyTo: email, // User's email for easy reply
             subject: `New Contact Form Submission from ${company}`,
@@ -85,9 +89,11 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        console.log('Resend: notification accepted', { id: data?.id, from: FROM_ADDRESS });
+
         // Send auto-reply to customer
-        await resend.emails.send({
-            from: 'Voon IQ <onboarding@resend.dev>',
+        const { error: replyError } = await resend.emails.send({
+            from: FROM_ADDRESS,
             to: email,
             subject: 'Kiitos yhteydenotostasi — Voon IQ',
             html: `
@@ -145,6 +151,11 @@ export async function POST(request: NextRequest) {
                 </html>
             `,
         });
+
+        // The team notification already went out, so a failed auto-reply must not fail the request.
+        if (replyError) {
+            console.error('Resend auto-reply error:', replyError);
+        }
 
         return NextResponse.json(
             { success: true, messageId: data?.id },

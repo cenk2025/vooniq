@@ -27,26 +27,26 @@ export function CookieConsent() {
     if (!isVisible) return null;
 
     return (
-        <div className="fixed bottom-6 left-6 right-6 z-[100] md:left-auto md:max-w-md animate-in fade-in slide-in-from-bottom-10 duration-500">
-            <div className="glass p-6 rounded-3xl border border-slate-700 shadow-2xl">
-                <p className="text-slate-300 text-sm leading-relaxed mb-6">
+        <div className="fixed bottom-4 left-4 right-4 z-[100] md:left-6 md:right-auto md:bottom-6 md:max-w-md fade-in-up">
+            <div className="rounded-[1.75rem] bg-cream text-ink p-6 shadow-[0_20px_50px_rgba(0,0,0,0.45)] border-2 border-ink">
+                <p className="text-sm md:text-[0.95rem] leading-relaxed mb-5">
                     {t('cookie_text') as string}
                 </p>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2.5">
                     <button
                         onClick={handleAccept}
-                        className="flex-1 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold rounded-xl transition-colors"
+                        className="btn-pop flex-1 px-6 py-2.5 bg-lime text-ink border-2 border-ink text-sm font-bold rounded-full focus-visible-ring"
                     >
                         {t('cookie_accept') as string}
                     </button>
                     <button
                         onClick={handleReject}
-                        className="flex-1 px-6 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-bold rounded-xl transition-colors"
+                        className="btn-pop flex-1 px-6 py-2.5 bg-transparent text-ink border-2 border-ink text-sm font-bold rounded-full hover:bg-ink hover:text-cream focus-visible-ring"
                     >
                         {t('cookie_reject') as string}
                     </button>
                     <button
-                        className="w-full md:w-auto px-6 py-2.5 text-slate-500 hover:text-slate-400 text-xs font-medium transition-colors"
+                        className="w-full px-6 py-1.5 text-ink/60 hover:text-ink text-xs font-semibold underline underline-offset-4 transition-colors"
                     >
                         {t('cookie_manage') as string}
                     </button>

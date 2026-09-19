@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Caveat } from "next/font/google"; // Added Caveat
+import { Geist, Geist_Mono, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -16,10 +16,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const caveat = Caveat({
-  variable: "--font-caveat",
-  subsets: ["latin"],
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
+  subsets: ["latin", "latin-ext"],
 });
+
+// Runs before paint so the saved theme is applied without a flash.
+const themeInitScript = `try{var m=localStorage.getItem('theme-mode');var l=m==='light'||(m==='auto'&&matchMedia('(prefers-color-scheme: light)').matches);document.documentElement.classList.add(l?'light':'dark')}catch(e){document.documentElement.classList.add('dark')}`;
 
 const siteUrl = "https://vooniq.com";
 const siteName = "Voon IQ — AI & Technology for Business";
@@ -112,16 +115,13 @@ export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
   alternates: {
     canonical: siteUrl,
-    languages: {
-      'fi': siteUrl,
-      'en': `${siteUrl}/en`,
-    },
   },
   category: "technology",
   classification: "Business Services, AI Consulting, Technology Consulting",
-  other: {
-    'google-site-verification': 'your-verification-code-here',
-  },
+  // Only emitted once a real code is set in GOOGLE_SITE_VERIFICATION.
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
 };
 
 export default function RootLayout({
@@ -131,8 +131,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fi" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} antialiased bg-slate-950 text-slate-200`}
+        className={`${geistSans.variable} ${geistMono.variable} ${bricolage.variable} font-sans antialiased bg-bg text-fg`}
       >
         <ThemeProvider>
           <LocaleProvider>
