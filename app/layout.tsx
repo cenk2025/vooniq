@@ -24,7 +24,7 @@ const bricolage = Bricolage_Grotesque({
 // Runs before paint so the saved theme is applied without a flash.
 const themeInitScript = `try{var m=localStorage.getItem('theme-mode');var l=m==='light'||(m==='auto'&&matchMedia('(prefers-color-scheme: light)').matches);document.documentElement.classList.add(l?'light':'dark')}catch(e){document.documentElement.classList.add('dark')}`;
 
-const siteUrl = "https://vooniq.com";
+const siteUrl = "https://voon.fi";
 const siteName = "Voon IQ — AI & Technology for Business";
 const siteDescription = "Helping Finnish companies adopt AI safely and fast: automation, analytics, copilots, and pragmatic implementations. Expert AI consulting and implementation services in Finland.";
 

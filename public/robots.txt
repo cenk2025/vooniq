@@ -25,4 +25,4 @@ User-agent: Applebot-Extended
 Allow: /
 
 # Sitemap location
-Sitemap: https://vooniq.com/sitemap.xml
+Sitemap: https://voon.fi/sitemap.xml

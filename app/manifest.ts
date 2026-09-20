@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
         description: 'Helping Finnish companies adopt AI safely and fast: automation, analytics, copilots, and pragmatic implementations.',
         start_url: '/',
         display: 'standalone',
-        background_color: '#020617',
-        theme_color: '#3b82f6',
+        background_color: '#1a0a10',
+        theme_color: '#ee2ea6',
         icons: [
             {
                 src: '/icon-192.png',

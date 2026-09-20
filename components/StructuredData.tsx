@@ -10,8 +10,8 @@ export function StructuredData() {
         "@type": "Organization",
         "name": "Voon IQ",
         "legalName": "Voon Oy",
-        "url": "https://vooniq.com",
-        "logo": "https://vooniq.com/icon-512.png",
+        "url": "https://voon.fi",
+        "logo": "https://voon.fi/icon-512.png",
         "foundingDate": "2024",
         "founders": [
             {
@@ -92,12 +92,12 @@ export function StructuredData() {
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "Voon IQ",
-        "url": "https://vooniq.com",
+        "url": "https://voon.fi",
         "potentialAction": {
             "@type": "SearchAction",
             "target": {
                 "@type": "EntryPoint",
-                "urlTemplate": "https://vooniq.com/?q={search_term_string}"
+                "urlTemplate": "https://voon.fi/?q={search_term_string}"
             },
             "query-input": "required name=search_term_string"
         },
@@ -149,7 +149,7 @@ export function StructuredData() {
                 "@type": "ListItem",
                 "position": 1,
                 "name": "Home",
-                "item": "https://vooniq.com"
+                "item": "https://voon.fi"
             }
         ]
     };

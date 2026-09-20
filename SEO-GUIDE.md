@@ -107,7 +107,7 @@ AI arama motorları (ChatGPT, Perplexity, Claude, vb.) geleneksel arama motorlar
    - Event tracking kurulumu
 
 3. **Domain Ayarları**
-   - `vooniq.com` domain'ini ayarla
+   - `voon.fi` domain'ini ayarla
    - SSL sertifikası
    - DNS yapılandırması
 
@@ -139,7 +139,7 @@ Aşağıdaki araçlarla SEO'yu test edin:
 
 - `layout.tsx` içindeki `google-site-verification` kodunu Google Search Console'dan alınan gerçek kod ile değiştirin
 - Twitter handle'ı (@vooniq) gerçek hesap ile güncelleyin
-- Domain deploy edildikten sonra tüm URL'leri `vooniq.com` ile güncelleyin
+- Domain deploy edildikten sonra tüm URL'leri `voon.fi` ile güncelleyin
 - Sitemap otomatik olarak `/sitemap.xml` adresinde yayınlanacak
 - Manifest otomatik olarak `/manifest.webmanifest` adresinde yayınlanacak
 
