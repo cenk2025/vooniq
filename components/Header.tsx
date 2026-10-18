@@ -30,12 +30,13 @@ export function Header() {
                         className="flex items-center focus-visible-ring rounded-lg"
                     >
                         <Image
-                            src="/logo.png"
+                            src="/logo-sm.png"
                             alt="Voon IQ"
-                            width={1200}
-                            height={346}
+                            width={480}
+                            height={138}
+                            unoptimized
                             priority
-                            className="h-9 md:h-11 w-auto"
+                            className="h-6 md:h-7 w-auto"
                         />
                     </a>
 
