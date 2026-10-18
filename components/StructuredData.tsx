@@ -2,180 +2,132 @@
 
 import { useLocale } from './LocaleProvider';
 
+const SITE = 'https://voon.fi';
+
+/**
+ * One @graph with linked entities (@id) so search engines and AI answer engines
+ * can resolve who the business is, what it sells and what it costs.
+ * Every value is taken from the same translations that render on the page —
+ * FAQPage markup must mirror the visible FAQ.
+ */
 export function StructuredData() {
     const { locale, t } = useLocale();
+    const s = (key: string) => t(key) as string;
 
-    const organizationSchema = {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Voon IQ",
-        "legalName": "Voon Oy",
-        "url": "https://voon.fi",
-        "logo": "https://voon.fi/icon-512.png",
-        "foundingDate": "2024",
-        "founders": [
+    const services = [1, 2, 3, 4, 5, 6].map((n) => ({
+        '@type': 'Service',
+        '@id': `${SITE}/#service-${n}`,
+        name: s(`svc_${n}_title`),
+        description: s(`svc_${n}_body`),
+        serviceType: s(`svc_${n}_title`),
+        provider: { '@id': `${SITE}/#organization` },
+        areaServed: { '@type': 'Country', name: 'Finland' },
+    }));
+
+    const offers = [
+        { n: 1, min: 990 },
+        { n: 2, min: 3900 },
+        { n: 3, min: null },
+    ].map(({ n, min }) => ({
+        '@type': 'Offer',
+        name: s(`plan_${n}_name`),
+        description: [s(`plan_${n}_desc`), ...(t(`plan_${n}_features`) as readonly string[])].join(' · '),
+        ...(min !== null && {
+            priceCurrency: 'EUR',
+            priceSpecification: {
+                '@type': 'PriceSpecification',
+                minPrice: min,
+                priceCurrency: 'EUR',
+            },
+        }),
+        seller: { '@id': `${SITE}/#organization` },
+    }));
+
+    const graph = {
+        '@context': 'https://schema.org',
+        '@graph': [
             {
-                "@type": "Person",
-                "name": "Cenk Yakinlar"
-            }
-        ],
-        "address": {
-            "@type": "PostalAddress",
-            "addressCountry": "FI",
-            "addressLocality": "Finland"
-        },
-        "contactPoint": {
-            "@type": "ContactPoint",
-            "contactType": "Customer Service",
-            "email": "info@voon.fi",
-            "availableLanguage": ["Finnish", "English"]
-        },
-        "sameAs": [
-            "https://business.voon.fi"
-        ],
-        "description": locale === 'fi'
-            ? "Autamme suomalaisia yrityksiä ottamaan tekoälyn käyttöön turvallisesti ja nopeasti: automaatio, analytiikka, copilotit ja käytännönläheiset toteutukset."
-            : "Helping Finnish companies adopt AI safely and fast: automation, analytics, copilots, and pragmatic implementations."
-    };
-
-    const serviceSchema = {
-        "@context": "https://schema.org",
-        "@type": "Service",
-        "serviceType": "AI Consulting and Implementation",
-        "provider": {
-            "@type": "Organization",
-            "name": "Voon IQ"
-        },
-        "areaServed": {
-            "@type": "Country",
-            "name": "Finland"
-        },
-        "hasOfferCatalog": {
-            "@type": "OfferCatalog",
-            "name": "AI Services",
-            "itemListElement": [
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": locale === 'fi' ? "Tekoälyautomaatio" : "AI Automation",
-                        "description": locale === 'fi'
-                            ? "Automatisoi toistuvat prosessit ja vapauta aikaa arvokkaampaan työhön"
-                            : "Automate repetitive processes and free up time for more valuable work"
-                    }
+                '@type': 'Organization',
+                '@id': `${SITE}/#organization`,
+                name: 'Voon IQ',
+                legalName: 'Voon Oy',
+                url: SITE,
+                logo: {
+                    '@type': 'ImageObject',
+                    url: `${SITE}/icon-512.png`,
+                    width: 512,
+                    height: 512,
                 },
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": locale === 'fi' ? "Tekoälyanalytiikka" : "AI Analytics",
-                        "description": locale === 'fi'
-                            ? "Muuta data toimiviksi oivalluksiksi ja paremmiksi päätöksiksi"
-                            : "Transform data into actionable insights and better decisions"
-                    }
+                image: `${SITE}/og-image.png`,
+                foundingDate: '2024',
+                founder: { '@type': 'Person', name: 'Cenk Yakinlar' },
+                address: { '@type': 'PostalAddress', addressCountry: 'FI' },
+                areaServed: { '@type': 'Country', name: 'Finland' },
+                email: 'info@voon.fi',
+                contactPoint: {
+                    '@type': 'ContactPoint',
+                    contactType: 'customer service',
+                    email: 'info@voon.fi',
+                    availableLanguage: ['fi', 'en'],
                 },
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": locale === 'fi' ? "Tekoälycopilotit" : "AI Copilots",
-                        "description": locale === 'fi'
-                            ? "Rakenna räätälöityjä tekoälyassistentteja tiimillesi"
-                            : "Build custom AI assistants for your team"
-                    }
-                }
-            ]
-        }
-    };
-
-    const websiteSchema = {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "Voon IQ",
-        "url": "https://voon.fi",
-        "potentialAction": {
-            "@type": "SearchAction",
-            "target": {
-                "@type": "EntryPoint",
-                "urlTemplate": "https://voon.fi/?q={search_term_string}"
+                sameAs: ['https://business.voon.fi'],
+                knowsAbout: [
+                    'Tekoäly',
+                    'Artificial intelligence',
+                    'Prosessiautomaatio',
+                    'Business process automation',
+                    'AI copilots',
+                    'Data analytics',
+                    'Generatiivinen tekoäly',
+                    'Large language models',
+                ],
+                description: s('hero_subtitle'),
+                makesOffer: offers,
+                hasOfferCatalog: {
+                    '@type': 'OfferCatalog',
+                    name: s('services_title'),
+                    itemListElement: services.map((svc) => ({
+                        '@type': 'Offer',
+                        itemOffered: { '@id': svc['@id'] },
+                    })),
+                },
             },
-            "query-input": "required name=search_term_string"
-        },
-        "inLanguage": ["fi", "en"]
-    };
-
-    const faqSchema = {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
+            ...services,
             {
-                "@type": "Question",
-                "name": locale === 'fi' ? "Mikä on Voon IQ?" : "What is Voon IQ?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": locale === 'fi'
-                        ? "Voon IQ on suomalainen tekoälykonsultointi- ja toteutusyritys, joka auttaa yrityksiä ottamaan tekoälyn käyttöön turvallisesti ja nopeasti."
-                        : "Voon IQ is a Finnish AI consulting and implementation company that helps businesses adopt AI safely and quickly."
-                }
+                '@type': 'WebSite',
+                '@id': `${SITE}/#website`,
+                name: 'Voon IQ',
+                url: SITE,
+                publisher: { '@id': `${SITE}/#organization` },
+                inLanguage: ['fi', 'en'],
             },
             {
-                "@type": "Question",
-                "name": locale === 'fi' ? "Mitä palveluita Voon IQ tarjoaa?" : "What services does Voon IQ offer?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": locale === 'fi'
-                        ? "Tarjoamme tekoälyautomaatiota, analytiikkaa, räätälöityjä copilot-ratkaisuja sekä käytännönläheisiä tekoälytoteutuksia suomalaisille yrityksille."
-                        : "We offer AI automation, analytics, custom copilot solutions, and pragmatic AI implementations for Finnish companies."
-                }
+                '@type': 'WebPage',
+                '@id': `${SITE}/#webpage`,
+                url: SITE,
+                name: 'Voon IQ — Tekoälykonsultointi ja automaatio yrityksille',
+                isPartOf: { '@id': `${SITE}/#website` },
+                about: { '@id': `${SITE}/#organization` },
+                primaryImageOfPage: { '@type': 'ImageObject', url: `${SITE}/og-image.png` },
+                inLanguage: locale,
             },
             {
-                "@type": "Question",
-                "name": locale === 'fi' ? "Kenelle Voon IQ:n palvelut sopivat?" : "Who are Voon IQ's services for?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": locale === 'fi'
-                        ? "Palvelumme sopivat kaikenkokoisille suomalaisille yrityksille, jotka haluavat hyödyntää tekoälyä liiketoiminnassaan."
-                        : "Our services are suitable for Finnish companies of all sizes looking to leverage AI in their business."
-                }
-            }
-        ]
-    };
-
-    const breadcrumbSchema = {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {
-                "@type": "ListItem",
-                "position": 1,
-                "name": "Home",
-                "item": "https://voon.fi"
-            }
-        ]
+                '@type': 'FAQPage',
+                '@id': `${SITE}/#faq`,
+                inLanguage: locale,
+                mainEntity: [1, 2, 3, 4].map((n) => ({
+                    '@type': 'Question',
+                    name: s(`faq_q${n}`),
+                    acceptedAnswer: { '@type': 'Answer', text: s(`faq_a${n}`) },
+                })),
+            },
+        ],
     };
 
     return (
-        <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-            />
-        </>
+        <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }}
+        />
     );
 }

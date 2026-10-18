@@ -25,8 +25,8 @@ const bricolage = Bricolage_Grotesque({
 const themeInitScript = `try{var m=localStorage.getItem('theme-mode');var l=m==='light'||(m==='auto'&&matchMedia('(prefers-color-scheme: light)').matches);document.documentElement.classList.add(l?'light':'dark')}catch(e){document.documentElement.classList.add('dark')}`;
 
 const siteUrl = "https://voon.fi";
-const siteName = "Voon IQ — AI & Technology for Business";
-const siteDescription = "Helping Finnish companies adopt AI safely and fast: automation, analytics, copilots, and pragmatic implementations. Expert AI consulting and implementation services in Finland.";
+const siteName = "Voon IQ — Tekoälykonsultointi ja automaatio yrityksille";
+const siteDescription = "Voon IQ auttaa suomalaisia yrityksiä ottamaan tekoälyn käyttöön turvallisesti ja nopeasti: tekoälyautomaatio, copilotit ja analytiikka. Pilotti 30–60 päivässä. AI consulting in Finland.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -70,7 +70,6 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "fi_FI",
-    alternateLocale: ["en_US"],
     url: siteUrl,
     siteName: siteName,
     title: siteName,
@@ -80,7 +79,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Voon IQ - AI & Technology for Business",
+        alt: "Voon IQ — tekoäly ja automaatio yrityksille",
       },
     ],
   },
@@ -89,7 +88,6 @@ export const metadata: Metadata = {
     title: siteName,
     description: siteDescription,
     images: ["/og-image.png"],
-    creator: "@vooniq",
   },
   robots: {
     index: true,
@@ -109,7 +107,7 @@ export const metadata: Metadata = {
       { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
     apple: [
-      { url: "/icon-192.png" },
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
   },
   manifest: "/manifest.webmanifest",
@@ -118,6 +116,7 @@ export const metadata: Metadata = {
   },
   category: "technology",
   classification: "Business Services, AI Consulting, Technology Consulting",
+  applicationName: "Voon IQ",
   // Only emitted once a real code is set in GOOGLE_SITE_VERIFICATION.
   verification: process.env.GOOGLE_SITE_VERIFICATION
     ? { google: process.env.GOOGLE_SITE_VERIFICATION }

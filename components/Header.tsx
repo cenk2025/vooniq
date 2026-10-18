@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { useLocale } from './LocaleProvider';
 import { useTheme } from './ThemeProvider';
 import { Icons } from './Icons';
@@ -25,9 +26,17 @@ export function Header() {
                     {/* Logo */}
                     <a
                         href="#top"
-                        className="font-display text-2xl md:text-[1.75rem] font-extrabold tracking-tight text-hot focus-visible-ring rounded-lg"
+                        aria-label="Voon IQ"
+                        className="flex items-center focus-visible-ring rounded-lg"
                     >
-                        Voon <span className="text-cream">IQ</span>
+                        <Image
+                            src="/logo.png"
+                            alt="Voon IQ"
+                            width={1200}
+                            height={346}
+                            priority
+                            className="h-9 md:h-11 w-auto"
+                        />
                     </a>
 
                     {/* Desktop navigation */}

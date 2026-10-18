@@ -1,0 +1,48 @@
+# Voon IQ
+
+> Voon IQ (Voon Oy) is a Finnish AI consulting and implementation company. We help companies in Finland adopt AI safely and quickly: AI opportunity mapping, process automation and agents, secure AI copilots, and data analytics. Typical first results within 30–60 days via a pilot. / Voon IQ on suomalainen tekoälykonsultointi- ja toteutusyritys: tekoälyautomaatio, tekoälyavustajat (copilotit), analytiikka ja tekoälykartoitus suomalaisille yrityksille.
+
+Website: https://voon.fi (Finnish by default, English toggle on the page)
+Contact: info@voon.fi
+Business site: https://business.voon.fi/fi
+Country served: Finland. Languages: Finnish, English.
+
+## Services (Palvelut)
+
+- AI opportunity mapping (AI-kartoitus ja mahdollisuuskartta): workflow review, value-vs-effort prioritisation, 30–60 day pilot plan.
+- Process automation and agents (Prosessiautomaatio ja agentit): documents, email, tickets, CRM/ERP integrations, quality assurance and logging.
+- Secure AI copilots (Tietoturvalliset AI-copilotit): company-specific assistant for search, summarisation, guidance and internal knowledge base with role-based access.
+- Data & analytics (Data & analytiikka): forecasts, KPI dashboards, sales and churn analysis, demand forecasting, automated reporting.
+- AI-readiness assessment (AI-ready yritystestaus): quick test of data, processes, skills, security and change readiness, with a 90-day priority list.
+- Ongoing support and development (Jatkuva tuki ja kehitys): monthly improvements, security reviews, team training.
+
+## Use cases (Käyttötapaukset)
+
+- Sales: lead scoring, proposal drafts, customer notes and follow-ups.
+- HR & recruiting: application pre-screening, competence profiles, interview guides — a human decides, AI assists.
+- Customer service: reply drafts, guidance search, ticketing and quality control, also multilingual.
+- Finance: invoice processing, anomaly detection and reporting.
+
+## How we work (Miten etenemme)
+
+1. Free initial mapping — identify the 2–3 best targets and agree goals.
+2. Pilot — build an MVP, metrics and risk controls; show results with data.
+3. Deployment — integrate into daily work, train teams, assure quality.
+4. Scaling — extend working solutions and build the next automations.
+
+## Packages and pricing (Paketit) — indicative, final quote depends on scope
+
+- Start — from €990: quick discovery and an actionable plan.
+- Pilot — from €3,900: one working solution built and its value measured.
+- Scale — custom pricing: ongoing development across several use cases.
+
+## FAQ
+
+- Is this only for large companies? No. We start with pilots that also fit SMEs; the key is a clear use case.
+- How is security handled? Permissions, boundaries and logging are always built in; we choose architectures where data stays under your control.
+- How fast do results show? Often during the first pilot, typically within 30–60 days.
+- Do we need a mature data platform? No. We start where you are: value first, then scale responsibly.
+
+## Optional
+
+- [Sitemap](https://voon.fi/sitemap.xml)

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useLocale } from './LocaleProvider';
 
 export function Footer() {
@@ -42,13 +43,16 @@ export function Footer() {
                 </div>
             </div>
 
-            {/* Oversized wordmark */}
-            <a
-                href="#top"
-                aria-label="Voon IQ"
-                className="block select-none text-center font-display font-extrabold tracking-tighter leading-[0.8] text-azure text-[26vw] md:text-[21vw] whitespace-nowrap translate-y-[0.08em]"
-            >
-                Voon IQ
+            {/* Oversized logo */}
+            <a href="#top" aria-label="Voon IQ" className="block px-4 sm:px-6 lg:px-10 pb-10 md:pb-16">
+                <Image
+                    src="/logo.png"
+                    alt="Voon IQ"
+                    width={1200}
+                    height={346}
+                    sizes="(min-width: 1280px) 1200px, 92vw"
+                    className="w-full max-w-6xl mx-auto h-auto"
+                />
             </a>
         </footer>
     );

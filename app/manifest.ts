@@ -2,10 +2,11 @@ import { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
     return {
-        name: 'Voon IQ — AI & Technology for Business',
+        name: 'Voon IQ — Tekoälykonsultointi ja automaatio',
         short_name: 'Voon IQ',
-        description: 'Helping Finnish companies adopt AI safely and fast: automation, analytics, copilots, and pragmatic implementations.',
+        description: 'Autamme suomalaisia yrityksiä ottamaan tekoälyn käyttöön turvallisesti ja nopeasti.',
         start_url: '/',
+        lang: 'fi',
         display: 'standalone',
         background_color: '#1a0a10',
         theme_color: '#ee2ea6',

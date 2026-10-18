@@ -1,28 +1,12 @@
-# Allow all crawlers including AI bots
+# Voon IQ — https://voon.fi
+# All crawlers are welcome, including AI search / answer-engine bots
+# (OAI-SearchBot, ChatGPT-User, GPTBot, ClaudeBot, Claude-SearchBot, Claude-User,
+# PerplexityBot, Perplexity-User, Google-Extended, Applebot-Extended, CCBot, ...).
+# Only the API routes are off-limits.
 User-agent: *
 Allow: /
+Disallow: /api/
 
-# AI Search Engine Bots
-User-agent: GPTBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
-
-User-agent: anthropic-ai
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: Applebot-Extended
-Allow: /
-
-# Sitemap location
 Sitemap: https://voon.fi/sitemap.xml
+
+# Machine-readable summary for LLMs: https://voon.fi/llms.txt

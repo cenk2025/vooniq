@@ -80,17 +80,17 @@ export function ScrollHeroSection() {
     <section id="top" className="relative pt-28 md:pt-40 overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
         {/* Headline as colour blocks */}
-        <h1 className="fade-in-up font-display font-semibold leading-[0.95] tracking-tight text-[clamp(2rem,6.2vw,5.25rem)] flex flex-wrap justify-center gap-2.5 md:gap-4">
-          <span className="sr-only">{t('hero_title') as string}</span>
-          {blocks.map((text, i) => (
-            <span
-              key={i}
-              aria-hidden="true"
-              className={`rounded-[1.1rem] md:rounded-[1.75rem] px-4 md:px-8 pt-1.5 pb-2.5 md:pt-3 md:pb-4 ${blockPalette[i % blockPalette.length]}`}
-            >
-              {text}
-            </span>
-          ))}
+        <div className="fade-in-up font-display font-semibold leading-[0.95] tracking-tight text-[clamp(2rem,6.2vw,5.25rem)] flex flex-wrap justify-center gap-2.5 md:gap-4">
+          <h1 className="contents">
+            {blocks.map((text, i) => (
+              <span
+                key={i}
+                className={`rounded-[1.1rem] md:rounded-[1.75rem] px-4 md:px-8 pt-1.5 pb-2.5 md:pt-3 md:pb-4 ${blockPalette[i % blockPalette.length]}`}
+              >
+                {text}
+              </span>
+            ))}
+          </h1>
           <a
             href="#contact"
             aria-label={t('hero_cta_primary') as string}
@@ -98,7 +98,7 @@ export function ScrollHeroSection() {
           >
             <Icons.arrowRight className="w-[0.8em] h-[0.8em]" />
           </a>
-        </h1>
+        </div>
 
         <p className="fade-in-up mt-8 md:mt-12 max-w-2xl mx-auto text-lg md:text-2xl leading-snug text-fg/80" style={{ animationDelay: '0.1s' }}>
           {t('hero_subtitle') as string}
