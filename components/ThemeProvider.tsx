@@ -3,82 +3,62 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
 type Theme = 'light' | 'dark';
-type ThemeMode = 'auto' | 'light' | 'dark';
+/** 'light' = day, 'dark' = night, 'system' = follow the OS setting live. */
+export type ThemeMode = 'system' | 'light' | 'dark';
 
 interface ThemeContextType {
+    /** The theme actually applied right now. */
     theme: Theme;
+    /** The user's choice. */
     themeMode: ThemeMode;
     setThemeMode: (mode: ThemeMode) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+const STORAGE_KEY = 'theme-mode';
+const DARK_QUERY = '(prefers-color-scheme: dark)';
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
     const [themeMode, setThemeModeState] = useState<ThemeMode>('dark');
     const [theme, setTheme] = useState<Theme>('dark');
 
     useEffect(() => {
-        // Load saved preference
-        const saved = localStorage.getItem('theme-mode') as ThemeMode | null;
-        if (saved) {
+        // Load saved preference ('auto' was the old name for 'system')
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved === 'light' || saved === 'dark' || saved === 'system') {
             setThemeModeState(saved);
+        } else if (saved === 'auto') {
+            setThemeModeState('system');
         }
     }, []);
 
     useEffect(() => {
-        const determineTheme = (): Theme => {
-            if (themeMode === 'light') return 'light';
-            if (themeMode === 'dark') return 'dark';
+        const mediaQuery = window.matchMedia(DARK_QUERY);
 
-            // Auto mode: check system preference first
-            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                return 'dark';
-            }
-            if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-                return 'light';
-            }
-
-            // If no system preference, use time-based logic
-            const hour = new Date().getHours();
-            // Day: 7am-7pm (light), Night: 7pm-7am (dark)
-            return hour >= 7 && hour < 19 ? 'light' : 'dark';
+        const apply = () => {
+            const next: Theme =
+                themeMode === 'system' ? (mediaQuery.matches ? 'dark' : 'light') : themeMode;
+            setTheme(next);
+            document.documentElement.classList.toggle('dark', next === 'dark');
+            document.documentElement.classList.toggle('light', next === 'light');
         };
 
-        const updateTheme = () => {
-            const newTheme = determineTheme();
-            setTheme(newTheme);
+        apply();
 
-            document.documentElement.classList.toggle('dark', newTheme === 'dark');
-            document.documentElement.classList.toggle('light', newTheme === 'light');
-        };
-
-        updateTheme();
-
-        // Listen for system preference changes
-        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        const handleChange = () => {
-            if (themeMode === 'auto') {
-                updateTheme();
-            }
-        };
-
-        mediaQuery.addEventListener('change', handleChange);
-
-        // Update every minute for time-based switching (only in auto mode)
-        let interval: NodeJS.Timeout | null = null;
-        if (themeMode === 'auto') {
-            interval = setInterval(updateTheme, 60000);
-        }
-
-        return () => {
-            mediaQuery.removeEventListener('change', handleChange);
-            if (interval) clearInterval(interval);
-        };
+        // In system mode, follow OS changes live (e.g. automatic day/night switch)
+        if (themeMode !== 'system') return;
+        mediaQuery.addEventListener('change', apply);
+        return () => mediaQuery.removeEventListener('change', apply);
     }, [themeMode]);
 
     const setThemeMode = (mode: ThemeMode) => {
         setThemeModeState(mode);
-        localStorage.setItem('theme-mode', mode);
+        try {
+            localStorage.setItem(STORAGE_KEY, mode);
+        } catch {
+            // storage unavailable (private mode) — choice applies for this visit only
+        }
     };
 
     return (

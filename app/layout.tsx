@@ -22,7 +22,7 @@ const bricolage = Bricolage_Grotesque({
 });
 
 // Runs before paint so the saved theme is applied without a flash.
-const themeInitScript = `try{var m=localStorage.getItem('theme-mode');var l=m==='light'||(m==='auto'&&matchMedia('(prefers-color-scheme: light)').matches);document.documentElement.classList.add(l?'light':'dark')}catch(e){document.documentElement.classList.add('dark')}`;
+const themeInitScript = `try{var m=localStorage.getItem('theme-mode');var l=m==='light'||((m==='system'||m==='auto')&&!matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.add(l?'light':'dark')}catch(e){document.documentElement.classList.add('dark')}`;
 
 const siteUrl = "https://voon.fi";
 const siteName = "Voon IQ — Tekoälykonsultointi ja automaatio yrityksille";

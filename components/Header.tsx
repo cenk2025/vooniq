@@ -8,8 +8,14 @@ import { Icons } from './Icons';
 
 export function Header() {
     const { locale, setLocale, t } = useLocale();
-    const { theme, setThemeMode } = useTheme();
+    const { themeMode, setThemeMode } = useTheme();
     const [menuOpen, setMenuOpen] = useState(false);
+
+    const themeOptions = [
+        { mode: 'light', labelKey: 'theme_day', Icon: Icons.sun },
+        { mode: 'dark', labelKey: 'theme_night', Icon: Icons.moon },
+        { mode: 'system', labelKey: 'theme_system', Icon: Icons.system },
+    ] as const;
 
     const navItems = [
         { labelKey: 'nav_services', href: '#services' },
@@ -71,28 +77,28 @@ export function Header() {
                             {locale === 'fi' ? 'EN' : 'FI'}
                         </button>
 
-                        {/* Theme toggle */}
+                        {/* Theme: day / night / system */}
                         <div
                             className="flex items-center p-1 rounded-xl bg-cream/90"
                             role="group"
-                            aria-label="Theme"
+                            aria-label={t('theme_label') as string}
                         >
-                            <button
-                                onClick={() => setThemeMode('light')}
-                                aria-pressed={theme === 'light'}
-                                aria-label="Light theme"
-                                className={`w-8 h-7 md:w-9 md:h-8 rounded-lg flex items-center justify-center transition-colors focus-visible-ring ${theme === 'light' ? 'bg-hot text-cream' : 'text-ink/70 hover:text-ink'}`}
-                            >
-                                <Icons.sun className="w-4 h-4" />
-                            </button>
-                            <button
-                                onClick={() => setThemeMode('dark')}
-                                aria-pressed={theme === 'dark'}
-                                aria-label="Dark theme"
-                                className={`w-8 h-7 md:w-9 md:h-8 rounded-lg flex items-center justify-center transition-colors focus-visible-ring ${theme === 'dark' ? 'bg-hot text-cream' : 'text-ink/70 hover:text-ink'}`}
-                            >
-                                <Icons.moon className="w-4 h-4" />
-                            </button>
+                            {themeOptions.map(({ mode, labelKey, Icon }) => {
+                                const active = themeMode === mode;
+                                const label = t(labelKey) as string;
+                                return (
+                                    <button
+                                        key={mode}
+                                        onClick={() => setThemeMode(mode)}
+                                        aria-pressed={active}
+                                        aria-label={label}
+                                        title={label}
+                                        className={`w-7 h-7 md:w-9 md:h-8 rounded-lg flex items-center justify-center transition-colors focus-visible-ring ${active ? 'bg-hot text-cream' : 'text-ink/70 hover:text-ink'}`}
+                                    >
+                                        <Icon className="w-4 h-4" />
+                                    </button>
+                                );
+                            })}
                         </div>
 
                         {/* Mobile menu button */}
