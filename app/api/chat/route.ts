@@ -1,24 +1,59 @@
-import { createOpenAI, openai } from '@ai-sdk/openai';
+import { createOpenAI } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 
 // Set the runtime to edge for best performance
 export const runtime = 'edge';
 
-// --- Model provider ---------------------------------------------------------
-// NVIDIA API Catalog (build.nvidia.com) exposes an OpenAI-compatible endpoint.
-// Set NVIDIA_API_KEY to use it; without it the route falls back to OpenAI
-// (OPENAI_API_KEY) so the chatbot keeps working during the switch.
+// --- Model provider: NVIDIA API Catalog (build.nvidia.com) ------------------
+// OpenAI-compatible endpoint. Models are tried in order: NVIDIA_MODEL first, then
+// NVIDIA_FALLBACK_MODELS (comma separated). NVIDIA retires hosted models from time to
+// time, so a backup model keeps the chatbot alive. Auth errors (401/403) are not retried.
 const NVIDIA_BASE_URL = process.env.NVIDIA_BASE_URL ?? 'https://integrate.api.nvidia.com/v1';
-const NVIDIA_MODEL = process.env.NVIDIA_MODEL ?? 'mistralai/mistral-large-2-instruct';
+const MODEL_CHAIN = [
+    process.env.NVIDIA_MODEL ?? 'mistralai/mistral-large-2-instruct',
+    ...(process.env.NVIDIA_FALLBACK_MODELS ?? 'nvidia/llama-3.1-nemotron-70b-instruct,google/gemma-4-31b-it').split(','),
+]
+    .map((m) => m.trim())
+    .filter(Boolean);
+
+function describeError(error: unknown): string {
+    const e = error as { statusCode?: number; message?: string; responseBody?: string };
+    return `status=${e?.statusCode ?? 'n/a'} message=${e?.message ?? String(error)} body=${String(e?.responseBody ?? '').slice(0, 300)}`;
+}
 
 function getModel() {
-    const apiKey = process.env.NVIDIA_API_KEY;
-    if (apiKey) {
-        // 'compatible' avoids OpenAI-only request fields that other providers may reject.
-        const nvidia = createOpenAI({ baseURL: NVIDIA_BASE_URL, apiKey, compatibility: 'compatible' });
-        return nvidia.chat(NVIDIA_MODEL);
-    }
-    return openai('gpt-4o-mini');
+    const apiKey = process.env.NVIDIA_API_KEY?.trim();
+    if (!apiKey) throw new Error('NVIDIA_API_KEY is not set');
+
+    // 'compatible' avoids OpenAI-only request fields that other providers may reject.
+    const nvidia = createOpenAI({ baseURL: NVIDIA_BASE_URL, apiKey, compatibility: 'compatible' });
+    const models = MODEL_CHAIN.map((id) => nvidia.chat(id));
+    const [first] = models;
+
+    // HTTP errors are thrown by doStream before any text is streamed, so switching
+    // to the next model at that point is invisible to the visitor.
+    return new Proxy(first, {
+        get(target, prop) {
+            if (prop === 'doStream') {
+                return async (options: Parameters<typeof first.doStream>[0]) => {
+                    let lastError: unknown;
+                    for (const model of models) {
+                        try {
+                            return await model.doStream(options);
+                        } catch (error) {
+                            lastError = error;
+                            console.error(`NVIDIA request failed (${model.modelId}): ${describeError(error)}`);
+                            const status = (error as { statusCode?: number }).statusCode;
+                            if (status === 401 || status === 403) break;
+                        }
+                    }
+                    throw lastError;
+                };
+            }
+            const value = Reflect.get(target, prop, target);
+            return typeof value === 'function' ? value.bind(target) : value;
+        },
+    });
 }
 
 // Facts below mirror what is published on voon.fi — keep them in sync with lib/i18n.ts.
@@ -79,6 +114,20 @@ function sanitize(input: unknown): ChatMessage[] {
         .map((m) => ({ role: m.role, content: m.content.slice(0, MAX_CHARS) }));
 }
 
+// Many open models (Mistral-style chat templates) reject a conversation that starts with an
+// assistant turn or has two turns of the same role in a row. The chat UI opens with the
+// assistant greeting, so drop leading assistant turns and merge consecutive same-role turns.
+function normalize(messages: ChatMessage[]): ChatMessage[] {
+    const out: ChatMessage[] = [];
+    for (const m of messages) {
+        if (out.length === 0 && m.role === 'assistant') continue;
+        const last = out[out.length - 1];
+        if (last && last.role === m.role) last.content += `\n\n${m.content}`;
+        else out.push({ ...m });
+    }
+    return out;
+}
+
 export async function POST(req: Request) {
     try {
         const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'unknown';
@@ -87,7 +136,7 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json().catch(() => null);
-        const messages = sanitize(body?.messages);
+        const messages = normalize(sanitize(body?.messages));
         if (messages.length === 0 || messages[messages.length - 1].role !== 'user') {
             return new Response('Invalid request', { status: 400 });
         }
@@ -100,7 +149,7 @@ export async function POST(req: Request) {
             temperature: 0.5,
             maxTokens: 400,
             // Provider failures (bad key, quota, model removed) surface here, not in the response body.
-            onError: ({ error }) => console.error('Chat stream error:', error),
+            onError: ({ error }) => console.error(`Chat stream error: ${describeError(error)}`),
         });
 
         return result.toDataStreamResponse();
