@@ -16,6 +16,10 @@ const MODEL_CHAIN = [
     .map((m) => m.trim())
     .filter(Boolean);
 
+// A hosted model can queue or hang without ever answering. Give each attempt a short
+// time-to-first-response budget, then move on (Vercel needs a first byte within ~25 s).
+const ATTEMPT_TIMEOUT_MS = Number(process.env.NVIDIA_TIMEOUT_MS ?? 7000);
+
 function describeError(error: unknown): string {
     const e = error as { statusCode?: number; message?: string; responseBody?: string };
     return `status=${e?.statusCode ?? 'n/a'} message=${e?.message ?? String(error)} body=${String(e?.responseBody ?? '').slice(0, 300)}`;
@@ -38,11 +42,22 @@ function getModel() {
                 return async (options: Parameters<typeof first.doStream>[0]) => {
                     let lastError: unknown;
                     for (const model of models) {
+                        // Own controller: it times out the *wait for the response* only; once the
+                        // stream has started the timer is cleared and the caller's abort still works.
+                        const controller = new AbortController();
+                        const forwardAbort = () => controller.abort();
+                        options.abortSignal?.addEventListener('abort', forwardAbort);
+                        const timer = setTimeout(() => controller.abort(), ATTEMPT_TIMEOUT_MS);
                         try {
-                            return await model.doStream(options);
+                            const result = await model.doStream({ ...options, abortSignal: controller.signal });
+                            clearTimeout(timer);
+                            return result;
                         } catch (error) {
+                            clearTimeout(timer);
+                            options.abortSignal?.removeEventListener('abort', forwardAbort);
+                            if (options.abortSignal?.aborted) throw error; // visitor left, stop trying
                             lastError = error;
-                            console.error(`NVIDIA request failed (${model.modelId}): ${describeError(error)}`);
+                            console.error(`NVIDIA request failed (${model.modelId}, ${ATTEMPT_TIMEOUT_MS}ms budget): ${describeError(error)}`);
                             const status = (error as { statusCode?: number }).statusCode;
                             if (status === 401 || status === 403) break;
                         }
