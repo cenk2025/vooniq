@@ -3,8 +3,8 @@
 import { useChat } from 'ai/react';
 import { useState, useRef, useEffect } from 'react';
 import type { Message } from 'ai';
+import { useLocale } from './LocaleProvider';
 
-type Language = 'en' | 'fi';
 
 const translations = {
     en: {
@@ -16,6 +16,8 @@ const translations = {
         greeting: 'Hi! I\'m Sofia, your VoonIQ assistant. How can I help you today?',
         close: 'Close',
         open: 'Need help?',
+        error: 'Something went wrong. Please try again, or email info@voon.fi.',
+        retry: 'Try again',
     },
     fi: {
         title: 'Keskustele Sofian kanssa',
@@ -26,16 +28,18 @@ const translations = {
         greeting: 'Hei! Olen Sofia, VoonIQ-avustajasi. Miten voin auttaa sinua tänään?',
         close: 'Sulje',
         open: 'Tarvitsetko apua?',
+        error: 'Jokin meni pieleen. Yritä uudelleen tai kirjoita osoitteeseen info@voon.fi.',
+        retry: 'Yritä uudelleen',
     },
 };
 
 export default function Chatbot() {
-    const [language, setLanguage] = useState<Language>('fi');
+    const { locale: language } = useLocale();
     const t = translations[language];
     const [isOpen, setIsOpen] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
-    const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+    const { messages, setMessages, input, handleInputChange, handleSubmit, isLoading, error, reload } = useChat({
         api: '/api/chat',
         initialMessages: [
             {
@@ -54,13 +58,14 @@ export default function Chatbot() {
         scrollToBottom();
     }, [messages]);
 
-    // Detect language from document
+    // Keep the greeting in the site's language until the visitor has written something
     useEffect(() => {
-        const htmlLang = document.documentElement.lang;
-        if (htmlLang === 'en' || htmlLang === 'fi') {
-            setLanguage(htmlLang);
-        }
-    }, []);
+        setMessages((current) =>
+            current.length === 1 && current[0].id === 'greeting'
+                ? [{ ...current[0], content: t.greeting }]
+                : current,
+        );
+    }, [t.greeting, setMessages]);
 
     return (
         <>
@@ -162,6 +167,16 @@ export default function Chatbot() {
                                 </div>
                             </div>
                         )}
+                        {error && !isLoading && (
+                            <div className="chatbot-message chatbot-message-assistant" role="alert">
+                                <div className="chatbot-message-content">
+                                    {t.error}{' '}
+                                    <button type="button" onClick={() => reload()} className="underline font-semibold">
+                                        {t.retry}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                         <div ref={messagesEndRef} />
                     </div>
 
@@ -190,7 +205,7 @@ export default function Chatbot() {
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                     strokeWidth={2}
-                                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                                    d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"
                                 />
                             </svg>
                         </button>
