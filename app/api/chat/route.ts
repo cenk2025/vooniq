@@ -5,16 +5,36 @@ import { streamText } from 'ai';
 export const runtime = 'edge';
 
 // --- Model provider: NVIDIA API Catalog (build.nvidia.com) ------------------
-// OpenAI-compatible endpoint. Models are tried in order: NVIDIA_MODEL first, then
-// NVIDIA_FALLBACK_MODELS (comma separated). NVIDIA retires hosted models from time to
-// time, so a backup model keeps the chatbot alive. Auth errors (401/403) are not retried.
+// OpenAI-compatible endpoint. Models are tried in order: NVIDIA_MODEL first, then the
+// optional NVIDIA_FALLBACK_MODELS (comma separated). Availability differs per NVIDIA
+// account: models listed in the catalog can answer 404 "not found for account" or 410
+// (retired), so check a model with your own key before switching to it.
+// Auth errors (401/403) are not retried.
 const NVIDIA_BASE_URL = process.env.NVIDIA_BASE_URL ?? 'https://integrate.api.nvidia.com/v1';
 const MODEL_CHAIN = [
-    process.env.NVIDIA_MODEL ?? 'mistralai/mistral-large-2-instruct',
-    ...(process.env.NVIDIA_FALLBACK_MODELS ?? 'nvidia/llama-3.1-nemotron-70b-instruct,google/gemma-4-31b-it').split(','),
+    process.env.NVIDIA_MODEL ?? 'nvidia/nemotron-3.5-lightning-30b-a3b',
+    ...(process.env.NVIDIA_FALLBACK_MODELS ?? '').split(','),
 ]
     .map((m) => m.trim())
     .filter(Boolean);
+
+// Nemotron 3.x is a reasoning model: by default it spends the whole token budget on hidden
+// "thinking" and returns an empty answer. Chat needs the answer only, so thinking is switched
+// off unless NVIDIA_ENABLE_THINKING=true.
+const DISABLE_THINKING = process.env.NVIDIA_ENABLE_THINKING !== 'true';
+
+const nvidiaFetch: typeof fetch = (input, init) => {
+    if (DISABLE_THINKING && typeof init?.body === 'string') {
+        try {
+            const body = JSON.parse(init.body);
+            body.chat_template_kwargs = { ...body.chat_template_kwargs, enable_thinking: false };
+            return fetch(input, { ...init, body: JSON.stringify(body) });
+        } catch {
+            // not JSON — send as is
+        }
+    }
+    return fetch(input, init);
+};
 
 // A hosted model can queue or hang without ever answering. Give each attempt a short
 // time-to-first-response budget, then move on (Vercel needs a first byte within ~25 s).
@@ -30,7 +50,7 @@ function getModel() {
     if (!apiKey) throw new Error('NVIDIA_API_KEY is not set');
 
     // 'compatible' avoids OpenAI-only request fields that other providers may reject.
-    const nvidia = createOpenAI({ baseURL: NVIDIA_BASE_URL, apiKey, compatibility: 'compatible' });
+    const nvidia = createOpenAI({ baseURL: NVIDIA_BASE_URL, apiKey, compatibility: 'compatible', fetch: nvidiaFetch });
     const models = MODEL_CHAIN.map((id) => nvidia.chat(id));
     const [first] = models;
 
