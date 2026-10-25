@@ -20,8 +20,8 @@ const STORAGE_KEY = 'theme-mode';
 const DARK_QUERY = '(prefers-color-scheme: dark)';
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-    const [themeMode, setThemeModeState] = useState<ThemeMode>('dark');
-    const [theme, setTheme] = useState<Theme>('dark');
+    const [themeMode, setThemeModeState] = useState<ThemeMode>('system');
+    const [theme, setTheme] = useState<Theme>('light');
 
     useEffect(() => {
         // Load saved preference ('auto' was the old name for 'system')

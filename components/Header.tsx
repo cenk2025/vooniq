@@ -8,7 +8,7 @@ import { Icons } from './Icons';
 
 export function Header() {
     const { locale, setLocale, t } = useLocale();
-    const { themeMode, setThemeMode } = useTheme();
+    const { theme, themeMode, setThemeMode } = useTheme();
     const [menuOpen, setMenuOpen] = useState(false);
 
     const themeOptions = [
@@ -18,126 +18,103 @@ export function Header() {
     ] as const;
 
     const navItems = [
-        { labelKey: 'nav_services', href: '#services' },
-        { labelKey: 'nav_use_cases', href: '#use-cases' },
-        { labelKey: 'nav_process', href: '#process' },
-        { labelKey: 'nav_pricing', href: '#pricing' },
+        { labelKey: 'nav_products', href: '#products' },
+        { labelKey: 'nav_business', href: '#business' },
+        { labelKey: 'nav_public', href: '#public' },
+        { labelKey: 'nav_about', href: '#about' },
         { labelKey: 'nav_contact', href: '#contact' },
     ];
 
-    return (
-        <header className="fixed top-3 md:top-4 inset-x-3 md:inset-x-4 z-50">
-            <div className="max-w-7xl mx-auto bg-plum text-cream rounded-[1.75rem] shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
-                <div className="flex items-center justify-between h-14 md:h-[4.5rem] pl-5 pr-2.5 md:pl-7 md:pr-3">
-                    {/* Logo */}
-                    <a
-                        href="#top"
-                        aria-label="Voon IQ"
-                        className="flex items-center focus-visible-ring rounded-lg"
+    const themeSwitch = (size: 'sm' | 'lg') => (
+        <div className="flex items-center rounded-full bg-fill p-0.5" role="group" aria-label={t('theme_label') as string}>
+            {themeOptions.map(({ mode, labelKey, Icon }) => {
+                const active = themeMode === mode;
+                const label = t(labelKey) as string;
+                return (
+                    <button
+                        key={mode}
+                        onClick={() => setThemeMode(mode)}
+                        aria-pressed={active}
+                        aria-label={label}
+                        title={label}
+                        className={`${size === 'sm' ? 'w-7 h-7' : 'w-9 h-9'} rounded-full flex items-center justify-center transition-colors ${active ? 'bg-surface text-fg shadow-sm' : 'text-fg-2 hover:text-fg'}`}
                     >
-                        <Image
-                            src="/logo-sm.png"
-                            alt="Voon IQ"
-                            width={480}
-                            height={138}
-                            unoptimized
-                            priority
-                            className="h-6 md:h-7 w-auto"
-                        />
+                        <Icon className={size === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4'} />
+                    </button>
+                );
+            })}
+        </div>
+    );
+
+    return (
+        <header className="fixed inset-x-0 top-0 z-50 glass-nav border-b border-black/5 dark:border-white/10">
+            <div className="container-wide flex h-14 items-center justify-between gap-4">
+                <a href="#top" aria-label="VOON IQ" className="flex items-center rounded-md">
+                    <Image
+                        src={theme === 'dark' ? '/brand/voon-iq-logo-white.png' : '/brand/voon-iq-logo.png'}
+                        alt="VOON IQ"
+                        width={640}
+                        height={181}
+                        priority
+                        className="h-6 w-auto"
+                    />
+                </a>
+
+                <nav className="hidden lg:flex items-center gap-8" aria-label="Main">
+                    {navItems.map((item) => (
+                        <a key={item.href} href={item.href} className="text-[0.8125rem] text-fg/80 hover:text-fg transition-colors">
+                            {t(item.labelKey) as string}
+                        </a>
+                    ))}
+                </nav>
+
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => setLocale(locale === 'fi' ? 'en' : 'fi')}
+                        className="h-8 px-2.5 rounded-full text-[0.8125rem] font-medium text-fg/80 hover:bg-fill transition-colors"
+                        aria-label={locale === 'fi' ? 'Switch to English' : 'Vaihda suomeksi'}
+                    >
+                        {locale === 'fi' ? 'EN' : 'FI'}
+                    </button>
+
+                    <div className="hidden sm:block">{themeSwitch('sm')}</div>
+
+                    <a href="#contact" className="btn btn-primary btn-sm hidden md:inline-flex">
+                        {t('nav_cta') as string}
                     </a>
 
-                    {/* Desktop navigation */}
-                    <nav className="hidden lg:flex items-center gap-9">
-                        {navItems.map((item) => (
-                            <a
-                                key={item.href}
-                                href={item.href}
-                                className="text-[0.95rem] font-medium hover:text-lime transition-colors focus-visible-ring rounded"
-                            >
-                                {t(item.labelKey) as string}
-                            </a>
-                        ))}
-                    </nav>
-
-                    {/* Right side controls */}
-                    <div className="flex items-center gap-2 md:gap-3">
-                        <a
-                            href="#contact"
-                            className="hidden sm:inline-flex btn-pop px-4 md:px-5 py-2 md:py-2.5 bg-lime text-ink text-sm font-bold rounded-xl focus-visible-ring"
-                        >
-                            {t('nav_cta') as string}
-                        </a>
-
-                        {/* Language toggle */}
-                        <button
-                            onClick={() => setLocale(locale === 'fi' ? 'en' : 'fi')}
-                            className="h-9 md:h-10 px-3 text-sm font-bold rounded-xl border-2 border-cream/25 hover:border-lime hover:text-lime transition-colors focus-visible-ring"
-                            aria-label="Toggle language"
-                        >
-                            {locale === 'fi' ? 'EN' : 'FI'}
-                        </button>
-
-                        {/* Theme: day / night / system */}
-                        <div
-                            className="flex items-center p-1 rounded-xl bg-cream/90"
-                            role="group"
-                            aria-label={t('theme_label') as string}
-                        >
-                            {themeOptions.map(({ mode, labelKey, Icon }) => {
-                                const active = themeMode === mode;
-                                const label = t(labelKey) as string;
-                                return (
-                                    <button
-                                        key={mode}
-                                        onClick={() => setThemeMode(mode)}
-                                        aria-pressed={active}
-                                        aria-label={label}
-                                        title={label}
-                                        className={`w-7 h-7 md:w-9 md:h-8 rounded-lg flex items-center justify-center transition-colors focus-visible-ring ${active ? 'bg-hot text-cream' : 'text-ink/70 hover:text-ink'}`}
-                                    >
-                                        <Icon className="w-4 h-4" />
-                                    </button>
-                                );
-                            })}
-                        </div>
-
-                        {/* Mobile menu button */}
-                        <button
-                            onClick={() => setMenuOpen(!menuOpen)}
-                            aria-expanded={menuOpen}
-                            aria-label="Menu"
-                            className="lg:hidden w-10 h-10 rounded-xl bg-cream/10 flex flex-col items-center justify-center gap-1.5 focus-visible-ring"
-                        >
-                            <span className={`block h-0.5 w-5 bg-cream transition-transform ${menuOpen ? 'translate-y-2 rotate-45' : ''}`} />
-                            <span className={`block h-0.5 w-5 bg-cream transition-opacity ${menuOpen ? 'opacity-0' : ''}`} />
-                            <span className={`block h-0.5 w-5 bg-cream transition-transform ${menuOpen ? '-translate-y-2 -rotate-45' : ''}`} />
-                        </button>
-                    </div>
+                    <button
+                        onClick={() => setMenuOpen(!menuOpen)}
+                        aria-expanded={menuOpen}
+                        aria-label={t('nav_menu') as string}
+                        className="lg:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px]"
+                    >
+                        <span className={`block h-[1.5px] w-[18px] bg-fg transition-transform duration-300 ${menuOpen ? 'translate-y-[3.25px] rotate-45' : ''}`} />
+                        <span className={`block h-[1.5px] w-[18px] bg-fg transition-transform duration-300 ${menuOpen ? '-translate-y-[3.25px] -rotate-45' : ''}`} />
+                    </button>
                 </div>
+            </div>
 
-                {/* Mobile menu */}
-                {menuOpen && (
-                    <nav className="lg:hidden px-3 pb-4 pt-1 flex flex-col gap-1">
-                        {navItems.map((item) => (
-                            <a
-                                key={item.href}
-                                href={item.href}
-                                onClick={() => setMenuOpen(false)}
-                                className="px-4 py-3 rounded-xl text-lg font-display font-semibold hover:bg-cream/10 transition-colors"
-                            >
-                                {t(item.labelKey) as string}
-                            </a>
-                        ))}
+            {menuOpen && (
+                <nav className="lg:hidden container-wide pb-8 pt-4 flex flex-col" aria-label="Mobile">
+                    {navItems.map((item) => (
                         <a
-                            href="#contact"
+                            key={item.href}
+                            href={item.href}
                             onClick={() => setMenuOpen(false)}
-                            className="sm:hidden mt-2 px-4 py-3 rounded-xl bg-lime text-ink text-center font-bold"
+                            className="py-2.5 text-[1.75rem] font-semibold tracking-tight"
                         >
+                            {t(item.labelKey) as string}
+                        </a>
+                    ))}
+                    <div className="mt-6 flex items-center justify-between gap-4">
+                        <a href="#contact" onClick={() => setMenuOpen(false)} className="btn btn-primary">
                             {t('nav_cta') as string}
                         </a>
-                    </nav>
-                )}
-            </div>
+                        <div className="sm:hidden">{themeSwitch('lg')}</div>
+                    </div>
+                </nav>
+            )}
         </header>
     );
 }

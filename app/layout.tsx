@@ -1,32 +1,23 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Bricolage_Grotesque } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { LocaleProvider } from "@/components/LocaleProvider";
 import { StructuredData } from "@/components/StructuredData";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin", "latin-ext"],
 });
 
 // Runs before paint so the saved theme is applied without a flash.
-const themeInitScript = `try{var m=localStorage.getItem('theme-mode');var l=m==='light'||((m==='system'||m==='auto')&&!matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.add(l?'light':'dark')}catch(e){document.documentElement.classList.add('dark')}`;
+// No saved choice means 'system'.
+const themeInitScript = `try{var m=localStorage.getItem('theme-mode');var d=m==='dark'||(m!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.add(d?'dark':'light')}catch(e){document.documentElement.classList.add('light')}`;
 
 const siteUrl = "https://voon.fi";
-const siteName = "Voon IQ — Tekoälykonsultointi ja automaatio yrityksille";
-const siteDescription = "Voon IQ auttaa suomalaisia yrityksiä ottamaan tekoälyn käyttöön turvallisesti ja nopeasti: tekoälyautomaatio, copilotit ja analytiikka. Pilotti 30–60 päivässä. AI consulting in Finland.";
+const siteName = "VOON IQ — Osaaminen näkyviin";
+const siteDescription = "VOON IQ on jyväskyläläinen tekoälystartup: SkillPath, Talent Factory, BizPulse ja Nordway tunnistavat osaamisen ja näyttävät polun työhön, koulutukseen ja kasvuun. Lisäksi tekoälypalvelut yrityksille.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -36,6 +27,14 @@ export const metadata: Metadata = {
   },
   description: siteDescription,
   keywords: [
+    "osaamisen tunnistaminen",
+    "ESCO",
+    "SkillPath",
+    "Talent Factory",
+    "BizPulse",
+    "Nordway",
+    "työllisyyspalvelut",
+    "kotoutuminen",
     "AI consulting Finland",
     "tekoäly konsultointi",
     "AI implementation",
@@ -79,7 +78,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Voon IQ — tekoäly ja automaatio yrityksille",
+        alt: "VOON IQ — Osaaminen näkyviin",
       },
     ],
   },
@@ -115,7 +114,7 @@ export const metadata: Metadata = {
     canonical: siteUrl,
   },
   category: "technology",
-  classification: "Business Services, AI Consulting, Technology Consulting",
+  classification: "AI software, Skills recognition, Employment services, AI consulting",
   applicationName: "Voon IQ",
   // Only emitted once a real code is set in GOOGLE_SITE_VERIFICATION.
   verification: process.env.GOOGLE_SITE_VERIFICATION
@@ -134,7 +133,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${bricolage.variable} font-sans antialiased bg-bg text-fg`}
+        className={`${inter.variable} font-sans antialiased bg-bg text-fg`}
       >
         <ThemeProvider>
           <LocaleProvider>

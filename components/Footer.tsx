@@ -2,42 +2,75 @@
 
 import Image from 'next/image';
 import { useLocale } from './LocaleProvider';
+import { useTheme } from './ThemeProvider';
 
 export function Footer() {
     const { t } = useLocale();
+    const { theme } = useTheme();
+    const s = (k: string) => t(k) as string;
     const currentYear = new Date().getFullYear();
 
-    const linkClass = 'px-3.5 py-1.5 rounded-full text-sm md:text-base text-cream/75 hover:text-ink hover:bg-lime transition-colors focus-visible-ring';
+    const columns = [
+        {
+            title: s('footer_products'),
+            links: [
+                { label: 'SkillPath', href: 'https://tyo.voon.fi' },
+                { label: 'Talent Factory', href: 'https://worklife.voon.fi' },
+                { label: 'BizPulse', href: 'https://biz.voon.fi' },
+                { label: 'Nordway', href: 'https://nordway.voon.fi' },
+            ],
+        },
+        {
+            title: s('footer_company'),
+            links: [
+                { label: s('footer_ai_services'), href: '#ai' },
+                { label: s('nav_public'), href: '#public' },
+                { label: s('nav_about'), href: '#about' },
+                { label: 'business.voon.fi', href: 'https://business.voon.fi/fi' },
+            ],
+        },
+        {
+            title: s('footer_contact'),
+            links: [
+                { label: 'info@voon.fi', href: 'mailto:info@voon.fi' },
+                { label: s('footer_location'), href: '#contact' },
+            ],
+        },
+    ];
 
     return (
-        <footer className="relative bg-navy text-cream rounded-t-[2rem] md:rounded-t-[3.5rem] overflow-hidden py-14 md:py-20">
-            <div className="max-w-3xl mx-auto px-4 sm:px-6 flex flex-col items-center text-center">
-                <a href="#top" aria-label="Voon IQ" className="focus-visible-ring rounded-lg">
-                    <Image
-                        src="/logo-sm.png"
-                        alt="Voon IQ"
-                        width={480}
-                        height={138}
-                        unoptimized
-                        className="h-9 md:h-10 w-auto"
-                    />
-                </a>
-
-                <p className="mt-5 max-w-md text-cream/65 text-sm md:text-base leading-relaxed">
-                    Voon IQ auttaa suomalaisia yrityksiä hyödyntämään tekoälyä ja teknologiaa käytännönläheisesti ja turvallisesti.
-                </p>
-
-                <nav aria-label="Footer" className="mt-8 flex flex-wrap justify-center gap-x-1 gap-y-2">
-                    <a href="#services" className={linkClass}>AI-kartoitus</a>
-                    <a href="#services" className={linkClass}>Prosessiautomaatio</a>
-                    <a href="#services" className={linkClass}>Tekoäly-copilots</a>
-                    <a href="https://business.voon.fi/fi" className={linkClass}>{t('footer_business_link') as string}</a>
-                    <a href="#" className={linkClass}>{t('footer_privacy') as string}</a>
-                    <a href="#" className={linkClass}>{t('footer_terms') as string}</a>
-                </nav>
-
-                <div className="mt-10 pt-6 w-full border-t border-cream/10 text-cream/45 text-xs md:text-sm">
-                    &copy; {currentYear} Voon IQ. All rights reserved.
+        <footer className="bg-bg-alt text-[0.75rem] leading-[1.33] text-fg-2">
+            <div className="container-wide py-10">
+                <div className="grid gap-8 border-b border-line pb-8 md:grid-cols-[1.4fr_repeat(3,1fr)]">
+                    <div>
+                        <Image
+                            src={theme === 'dark' ? '/brand/voon-iq-logo-white.png' : '/brand/voon-iq-logo.png'}
+                            alt="VOON IQ"
+                            width={640}
+                            height={181}
+                            className="h-6 w-auto"
+                        />
+                        <p className="mt-4 max-w-xs text-[0.8125rem]">{s('footer_tagline')}</p>
+                    </div>
+                    {columns.map((col) => (
+                        <nav key={col.title} aria-label={col.title}>
+                            <h3 className="font-semibold text-fg">{col.title}</h3>
+                            <ul className="mt-3 space-y-2.5">
+                                {col.links.map((l) => (
+                                    <li key={l.label}>
+                                        <a href={l.href} className="hover:text-fg hover:underline underline-offset-2">{l.label}</a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
+                    ))}
+                </div>
+                <div className="pt-5 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                    <p>&copy; {currentYear} VOON IQ Oy. All rights reserved.</p>
+                    <p className="flex gap-4">
+                        <a href="#" className="hover:text-fg hover:underline underline-offset-2">{s('footer_privacy')}</a>
+                        <a href="#" className="hover:text-fg hover:underline underline-offset-2">{s('footer_terms')}</a>
+                    </p>
                 </div>
             </div>
         </footer>

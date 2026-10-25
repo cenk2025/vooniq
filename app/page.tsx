@@ -1,12 +1,13 @@
 'use client';
 
 import { Header } from '@/components/Header';
-import { ScrollHeroSection } from '@/components/ScrollHeroSection';
-import { ServicesSection } from '@/components/ServicesSection';
-import { UseCasesSection } from '@/components/UseCasesSection';
-import { ProcessSection } from '@/components/ProcessSection';
-import { ProofSection } from '@/components/ProofSection';
-import { PricingSection } from '@/components/PricingSection';
+import { Hero } from '@/components/Hero';
+import { IntroSection } from '@/components/IntroSection';
+import { ProductsSection } from '@/components/ProductsSection';
+import { BusinessSection } from '@/components/BusinessSection';
+import { AIServicesSection } from '@/components/AIServicesSection';
+import { PublicSection } from '@/components/PublicSection';
+import { FounderSection } from '@/components/FounderSection';
 import { ContactSection } from '@/components/ContactSection';
 import { FAQSection } from '@/components/FAQSection';
 import { Footer } from '@/components/Footer';
@@ -19,12 +20,13 @@ export default function Home() {
       <Header />
 
       <main>
-        <ScrollHeroSection />
-        <ServicesSection />
-        <UseCasesSection />
-        <ProcessSection />
-        <ProofSection />
-        <PricingSection />
+        <Hero />
+        <IntroSection />
+        <ProductsSection />
+        <BusinessSection />
+        <AIServicesSection />
+        <PublicSection />
+        <FounderSection />
         <ContactSection />
         <FAQSection />
       </main>
