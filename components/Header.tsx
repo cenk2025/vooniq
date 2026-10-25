@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useLocale } from './LocaleProvider';
 import { useTheme } from './ThemeProvider';
 import { Icons } from './Icons';
@@ -18,11 +19,11 @@ export function Header() {
     ] as const;
 
     const navItems = [
-        { labelKey: 'nav_products', href: '#products' },
-        { labelKey: 'nav_business', href: '#business' },
-        { labelKey: 'nav_public', href: '#public' },
-        { labelKey: 'nav_about', href: '#about' },
-        { labelKey: 'nav_contact', href: '#contact' },
+        { labelKey: 'nav_products', href: '/#products' },
+        { labelKey: 'nav_business', href: '/#business' },
+        { labelKey: 'nav_public', href: '/#public' },
+        { labelKey: 'nav_about', href: '/#about' },
+        { labelKey: 'nav_contact', href: '/#contact' },
     ];
 
     const themeSwitch = (size: 'sm' | 'lg') => (
@@ -49,7 +50,7 @@ export function Header() {
     return (
         <header className="fixed inset-x-0 top-0 z-50 glass-nav border-b border-black/5 dark:border-white/10">
             <div className="container-wide flex h-14 items-center justify-between gap-4">
-                <a href="#top" aria-label="VOON IQ" className="flex items-center rounded-md">
+                <Link href="/" aria-label="VOON IQ" className="flex items-center rounded-md">
                     <Image
                         src={theme === 'dark' ? '/brand/voon-iq-logo-white.png' : '/brand/voon-iq-logo.png'}
                         alt="VOON IQ"
@@ -58,7 +59,7 @@ export function Header() {
                         priority
                         className="h-6 w-auto"
                     />
-                </a>
+                </Link>
 
                 <nav className="hidden lg:flex items-center gap-8" aria-label="Main">
                     {navItems.map((item) => (
@@ -79,9 +80,9 @@ export function Header() {
 
                     <div className="hidden sm:block">{themeSwitch('sm')}</div>
 
-                    <a href="#contact" className="btn btn-primary btn-sm hidden md:inline-flex">
+                    <Link href="/#contact" className="btn btn-primary btn-sm hidden md:inline-flex">
                         {t('nav_cta') as string}
-                    </a>
+                    </Link>
 
                     <button
                         onClick={() => setMenuOpen(!menuOpen)}
@@ -108,9 +109,9 @@ export function Header() {
                         </a>
                     ))}
                     <div className="mt-6 flex items-center justify-between gap-4">
-                        <a href="#contact" onClick={() => setMenuOpen(false)} className="btn btn-primary">
+                        <Link href="/#contact" onClick={() => setMenuOpen(false)} className="btn btn-primary">
                             {t('nav_cta') as string}
-                        </a>
+                        </Link>
                         <div className="sm:hidden">{themeSwitch('lg')}</div>
                     </div>
                 </nav>

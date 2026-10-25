@@ -115,6 +115,9 @@ export function ContactSection() {
                                 )}
                                 {t('form_submit') as string}
                             </button>
+                            <p className="text-center text-[0.8125rem] text-fg-3">
+                                <a href="/tietosuoja" className="hover:text-fg underline underline-offset-2">{t('form_privacy_note') as string}</a>
+                            </p>
                         </form>
                     )}
                 </Reveal>
