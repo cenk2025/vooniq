@@ -162,9 +162,10 @@ export const translations = {
     footer_privacy: "Tietosuoja",
     footer_terms: "Käyttöehdot",
     footer_location: "Jyväskylä, Suomi",
-    cookie_text: "Käytämme evästeitä sivuston toimintaan ja analytiikkaan. Voit hyväksyä tai hylätä ne.",
-    cookie_accept: "Hyväksy",
-    cookie_reject: "Hylkää",
+    cookie_text: "Emme käytä seuranta- tai mainosevästeitä. Sivusto tallentaa selaimeesi vain kieli- ja teemavalintasi.",
+    cookie_accept: "Selvä",
+    cookie_more: "Tietosuoja",
+    form_privacy_note: "Käsittelemme tietojasi tietosuojaselosteemme mukaisesti.",
   },
   en: {
     nav_products: "Products",
@@ -324,9 +325,10 @@ export const translations = {
     footer_privacy: "Privacy",
     footer_terms: "Terms",
     footer_location: "Jyväskylä, Finland",
-    cookie_text: "We use cookies for site functionality and analytics. You can accept or reject them.",
-    cookie_accept: "Accept",
-    cookie_reject: "Reject",
+    cookie_text: "We use no tracking or advertising cookies. The site only stores your language and theme choice in your browser.",
+    cookie_accept: "Got it",
+    cookie_more: "Privacy",
+    form_privacy_note: "We process your data according to our privacy notice.",
   }
 } as const;
 

@@ -23,9 +23,9 @@ export function Footer() {
         {
             title: s('footer_company'),
             links: [
-                { label: s('footer_ai_services'), href: '#ai' },
-                { label: s('nav_public'), href: '#public' },
-                { label: s('nav_about'), href: '#about' },
+                { label: s('footer_ai_services'), href: '/#ai' },
+                { label: s('nav_public'), href: '/#public' },
+                { label: s('nav_about'), href: '/#about' },
                 { label: 'business.voon.fi', href: 'https://business.voon.fi/fi' },
             ],
         },
@@ -33,7 +33,7 @@ export function Footer() {
             title: s('footer_contact'),
             links: [
                 { label: 'info@voon.fi', href: 'mailto:info@voon.fi' },
-                { label: s('footer_location'), href: '#contact' },
+                { label: s('footer_location'), href: '/#contact' },
             ],
         },
     ];
@@ -68,8 +68,8 @@ export function Footer() {
                 <div className="pt-5 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                     <p>&copy; {currentYear} VOON IQ Oy. All rights reserved.</p>
                     <p className="flex gap-4">
-                        <a href="#" className="hover:text-fg hover:underline underline-offset-2">{s('footer_privacy')}</a>
-                        <a href="#" className="hover:text-fg hover:underline underline-offset-2">{s('footer_terms')}</a>
+                        <a href="/tietosuoja" className="hover:text-fg hover:underline underline-offset-2">{s('footer_privacy')}</a>
+                        <a href="/kayttoehdot" className="hover:text-fg hover:underline underline-offset-2">{s('footer_terms')}</a>
                     </p>
                 </div>
             </div>
