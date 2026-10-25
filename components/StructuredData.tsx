@@ -14,12 +14,17 @@ export function StructuredData() {
     const { locale, t } = useLocale();
     const s = (key: string) => t(key) as string;
 
-    const services = [1, 2, 3, 4, 5, 6].map((n) => ({
+    const services = [
+        { key: 'sp', url: 'https://tyo.voon.fi' },
+        { key: 'tf', url: 'https://worklife.voon.fi' },
+        { key: 'bp', url: 'https://biz.voon.fi' },
+        { key: 'nw', url: 'https://nordway.voon.fi' },
+    ].map(({ key, url }) => ({
         '@type': 'Service',
-        '@id': `${SITE}/#service-${n}`,
-        name: s(`svc_${n}_title`),
-        description: s(`svc_${n}_body`),
-        serviceType: s(`svc_${n}_title`),
+        '@id': `${SITE}/#service-${key}`,
+        name: key === 'bp' ? 'BizPulse' : s(`${key}_name`),
+        description: key === 'bp' ? s('business_body') : s(`${key}_body`),
+        url,
         provider: { '@id': `${SITE}/#organization` },
         areaServed: { '@type': 'Country', name: 'Finland' },
     }));
@@ -49,8 +54,8 @@ export function StructuredData() {
             {
                 '@type': 'Organization',
                 '@id': `${SITE}/#organization`,
-                name: 'Voon IQ',
-                legalName: 'Voon Oy',
+                name: 'VOON IQ',
+                legalName: 'VOON IQ Oy',
                 url: SITE,
                 logo: {
                     '@type': 'ImageObject',
@@ -61,7 +66,7 @@ export function StructuredData() {
                 image: `${SITE}/og-image.png`,
                 foundingDate: '2024',
                 founder: { '@type': 'Person', name: 'Cenk Yakinlar' },
-                address: { '@type': 'PostalAddress', addressCountry: 'FI' },
+                address: { '@type': 'PostalAddress', addressLocality: 'Jyväskylä', addressCountry: 'FI' },
                 areaServed: { '@type': 'Country', name: 'Finland' },
                 email: 'info@voon.fi',
                 contactPoint: {
@@ -72,6 +77,9 @@ export function StructuredData() {
                 },
                 sameAs: ['https://business.voon.fi'],
                 knowsAbout: [
+                    'Osaamisen tunnistaminen',
+                    'Skills recognition',
+                    'ESCO',
                     'Tekoäly',
                     'Artificial intelligence',
                     'Prosessiautomaatio',
@@ -85,7 +93,7 @@ export function StructuredData() {
                 makesOffer: offers,
                 hasOfferCatalog: {
                     '@type': 'OfferCatalog',
-                    name: s('services_title'),
+                    name: s('products_title'),
                     itemListElement: services.map((svc) => ({
                         '@type': 'Offer',
                         itemOffered: { '@id': svc['@id'] },
@@ -96,7 +104,7 @@ export function StructuredData() {
             {
                 '@type': 'WebSite',
                 '@id': `${SITE}/#website`,
-                name: 'Voon IQ',
+                name: 'VOON IQ',
                 url: SITE,
                 publisher: { '@id': `${SITE}/#organization` },
                 inLanguage: ['fi', 'en'],
@@ -105,7 +113,7 @@ export function StructuredData() {
                 '@type': 'WebPage',
                 '@id': `${SITE}/#webpage`,
                 url: SITE,
-                name: 'Voon IQ — Tekoälykonsultointi ja automaatio yrityksille',
+                name: 'VOON IQ — Osaaminen näkyviin',
                 isPartOf: { '@id': `${SITE}/#website` },
                 about: { '@id': `${SITE}/#organization` },
                 primaryImageOfPage: { '@type': 'ImageObject', url: `${SITE}/og-image.png` },
