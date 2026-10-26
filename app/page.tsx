@@ -1,39 +1,23 @@
-'use client';
+import type { Metadata } from 'next';
+import { HomePage } from '@/components/HomePage';
 
-import { Header } from '@/components/Header';
-import { Hero } from '@/components/Hero';
-import { IntroSection } from '@/components/IntroSection';
-import { ProductsSection } from '@/components/ProductsSection';
-import { BusinessSection } from '@/components/BusinessSection';
-import { AIServicesSection } from '@/components/AIServicesSection';
-import { PublicSection } from '@/components/PublicSection';
-import { FounderSection } from '@/components/FounderSection';
-import { ContactSection } from '@/components/ContactSection';
-import { FAQSection } from '@/components/FAQSection';
-import { Footer } from '@/components/Footer';
-import { CookieConsent } from '@/components/CookieConsent';
-import Chatbot from '@/components/Chatbot';
+// Canonical and robots live here, not in the root layout, so that 404 pages
+// don't inherit a canonical pointing at the homepage or an "index" directive.
+export const metadata: Metadata = {
+  alternates: { canonical: 'https://voon.fi' },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+};
 
-export default function Home() {
-  return (
-    <div className="relative min-h-screen">
-      <Header />
-
-      <main>
-        <Hero />
-        <IntroSection />
-        <ProductsSection />
-        <BusinessSection />
-        <AIServicesSection />
-        <PublicSection />
-        <FounderSection />
-        <ContactSection />
-        <FAQSection />
-      </main>
-
-      <Footer />
-      <CookieConsent />
-      <Chatbot />
-    </div>
-  );
+export default function Page() {
+  return <HomePage />;
 }

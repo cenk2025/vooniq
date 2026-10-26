@@ -88,17 +88,6 @@ export const metadata: Metadata = {
     description: siteDescription,
     images: ["/og-image.png"],
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
   icons: {
     icon: [
       { url: "/favicon.ico" },
@@ -110,9 +99,6 @@ export const metadata: Metadata = {
     ],
   },
   manifest: "/manifest.webmanifest",
-  alternates: {
-    canonical: siteUrl,
-  },
   category: "technology",
   classification: "AI software, Skills recognition, Employment services, AI consulting",
   applicationName: "Voon IQ",
