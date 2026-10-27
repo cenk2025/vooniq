@@ -124,6 +124,16 @@
     </div>
 
     <section class="card" style="margin-top:20px">
+      <h2 style="margin:0;font-size:17px">Lisää tilaaja</h2>
+      <p class="muted" style="margin:4px 0 0;font-size:13px">Lisää osoite suoraan uutiskirjesegmenttiin ilman vahvistusviestiä. Käytä vain, kun henkilö on antanut suostumuksensa.</p>
+      <div class="row" style="margin-top:12px">
+        <input id="add-email" type="email" placeholder="nimi@yritys.fi">
+        <button class="ghost" id="add" type="button" style="flex:0 0 auto">Lisää</button>
+      </div>
+      <div class="msg" id="add-msg"></div>
+    </section>
+
+    <section class="card" style="margin-top:20px">
       <div class="preview-head">
         <h2 style="margin:0;font-size:17px">Lähetykset</h2>
         <button class="ghost" id="refresh" type="button">Päivitä</button>
@@ -236,6 +246,16 @@
     show($('msg'), true, when ? `Ajastettu (${when.toLocaleString('fi-FI')}). ID: ${r.id}` : `Lähetys aloitettu. ID: ${r.id}`);
     loadList();
   }));
+
+  $('add').addEventListener('click', async (e) => {
+    const btn = e.currentTarget; btn.disabled = true;
+    try {
+      await api('add', { email: $('add-email').value });
+      show($('add-msg'), true, `${$('add-email').value} lisätty.`);
+      $('add-email').value = '';
+      login();
+    } catch (err) { show($('add-msg'), false, err.message); } finally { btn.disabled = false; }
+  });
 
   // ---- Broadcast list ----
   const fmt = (v) => (v ? new Date(v).toLocaleString('fi-FI', { dateStyle: 'short', timeStyle: 'short' }) : '–');

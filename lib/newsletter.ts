@@ -1,5 +1,6 @@
 // Server-only helpers for the newsletter route handlers (app/api/newsletter/*).
 import crypto from 'node:crypto';
+import type { Resend } from 'resend';
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://voon.fi').replace(/\/$/, '');
 export const NEWSLETTER_FROM = process.env.NEWSLETTER_FROM || 'VOON IQ <uutiset@uutiset.voon.fi>';
@@ -96,4 +97,30 @@ export function confirmEmailHtml(locale: NewsletterLocale, link: string): string
 </td></tr></table>
 <p style="color:#8a93a3;font-size:12px;margin-top:18px">VOON IQ Oy · Jyväskylä · voon.fi</p>
 </td></tr></table></body></html>`;
+}
+
+type ResendError = { name?: string; message?: string; statusCode?: number | null };
+export type SubscriberFailure = { step: string; error: ResendError };
+
+const alreadyThere = (error: ResendError) => /already|exist/i.test(error.message ?? '');
+
+// Adds (or re-activates) a contact and makes sure it is in every segment. Returns the failing step
+// and Resend's error, or null on success. Used by the confirm link and the admin page.
+export async function addSubscriber(resend: Resend, email: string, segments: string[]): Promise<SubscriberFailure | null> {
+    const created = await resend.contacts.create({ email, unsubscribed: false, segments: segments.map((id) => ({ id })) });
+    if (created.error) {
+        // Usually the contact already exists (earlier subscriber, or one who unsubscribed and is now
+        // opting in again): re-activate it.
+        const updated = await resend.contacts.update({ email, unsubscribed: false });
+        if (updated.error) return { step: alreadyThere(created.error) ? 'Tilaajan päivitys' : 'Tilaajan luonti', error: alreadyThere(created.error) ? updated.error : created.error };
+    }
+
+    // Do not trust the create call alone: add the contact to every segment it is not in yet.
+    const listed = await resend.contacts.segments.list({ email, limit: 100 });
+    const have = new Set(listed.error ? [] : listed.data?.data.map((segment) => segment.id));
+    for (const segmentId of segments.filter((id) => !have.has(id))) {
+        const added = await resend.contacts.segments.add({ email, segmentId });
+        if (added.error && !alreadyThere(added.error)) return { step: `Segmenttiin ${segmentId} lisäys`, error: added.error };
+    }
+    return null;
 }

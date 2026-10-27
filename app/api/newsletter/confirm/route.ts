@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { SITE_URL, segmentIds, verifyToken } from '@/lib/newsletter';
+import { SITE_URL, addSubscriber, segmentIds, verifyToken } from '@/lib/newsletter';
 
 // Step 2 of double opt-in: add the contact to the newsletter segment(s) in Resend, then send the
 // visitor back to the front page, which shows a notice for ?uutiskirje=ok|invalid|error.
@@ -27,37 +27,10 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-        const resend = new Resend(process.env.RESEND_API_KEY);
-        const created = await resend.contacts.create({
-            email,
-            unsubscribed: false,
-            segments: segments.map((id) => ({ id })),
-        });
-
-        if (created.error) {
-            // Most likely the contact already exists (earlier subscriber, or one who unsubscribed and is
-            // now opting in again): re-activate it.
-            const updated = await resend.contacts.update({ email, unsubscribed: false });
-            if (updated.error) {
-                console.error('Newsletter confirm failed:', created.error, updated.error);
-                return back('error');
-            }
-        }
-
-        // Do not trust the create call alone: check the contact really is in every segment and add it
-        // where it is missing, so a wrong segment id or API key permission shows up as an error.
-        const listed = await resend.contacts.segments.list({ email, limit: 100 });
-        if (listed.error) {
-            console.error('Newsletter confirm: cannot read contact segments:', listed.error);
+        const failure = await addSubscriber(new Resend(process.env.RESEND_API_KEY), email, segments);
+        if (failure) {
+            console.error('Newsletter confirm failed:', failure.step, failure.error);
             return back('error');
-        }
-        const have = new Set(listed.data?.data.map((segment) => segment.id));
-        for (const segmentId of segments.filter((id) => !have.has(id))) {
-            const added = await resend.contacts.segments.add({ email, segmentId });
-            if (added.error) {
-                console.error('Newsletter confirm: adding to segment failed:', segmentId, added.error);
-                return back('error');
-            }
         }
 
         console.log('Newsletter subscriber confirmed', { locale, at: new Date().toISOString() });

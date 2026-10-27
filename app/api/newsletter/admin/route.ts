@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { EMAIL_RE, NEWSLETTER_FROM, passwordMatches } from '@/lib/newsletter';
+import { EMAIL_RE, NEWSLETTER_FROM, addSubscriber, passwordMatches, segmentIds } from '@/lib/newsletter';
 
 const MAX_HTML = 900 * 1024;
 
@@ -45,6 +45,21 @@ export async function POST(request: NextRequest) {
                 }
             }
             return json({ ok: true, from: NEWSLETTER_FROM, segmentConfigured: Boolean(segmentId), segment });
+        }
+
+        if (body.action === 'add') {
+            // Same steps as the confirm link, with the Resend error shown: for adding subscribers by hand
+            // and for finding out why confirmations fail.
+            const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
+            if (!EMAIL_RE.test(email)) return json({ error: 'Sähköpostiosoite on virheellinen' }, 400);
+            const segments = segmentIds('fi');
+            if (!segments.length) return json({ error: 'NEWSLETTER_SEGMENT_ID puuttuu' }, 400);
+            const failure = await addSubscriber(resend, email, segments);
+            if (failure) {
+                console.error('Newsletter admin add failed:', failure.step, failure.error);
+                return json({ error: describe(failure.step, failure.error) }, 502);
+            }
+            return json({ ok: true });
         }
 
         if (body.action === 'list') {
