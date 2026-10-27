@@ -93,19 +93,31 @@ export async function POST(request: NextRequest) {
             if (scheduledAt && Number.isNaN(Date.parse(scheduledAt))) {
                 return json({ error: 'Ajastusaika on virheellinen' }, 400);
             }
-            const { data, error } = await resend.broadcasts.create({
+            // An empty segment cannot be sent to; say so plainly instead of passing on Resend's error.
+            const members = await resend.contacts.list({ segmentId, limit: 1 });
+            if (members.error) return json({ error: describe('Segmentin tilaajien haku', members.error) }, 502);
+            if (!members.data?.data.length) {
+                return json({ error: 'Segmentissä ei ole vielä yhtään tilaajaa. Tilaa ensin uutiskirje sivun alaosasta ja vahvista tilaus.' }, 400);
+            }
+
+            // Two steps (draft, then send) so a failure says which part failed, and the draft stays
+            // visible in Resend → Broadcasts even if sending does not go through.
+            const draft = await resend.broadcasts.create({
                 segmentId,
                 from: NEWSLETTER_FROM,
                 subject,
                 html,
                 previewText: previewText || undefined,
                 name: (typeof body.name === 'string' && body.name.trim()) || subject,
-                send: true,
-                scheduledAt,
             });
+            if (draft.error || !draft.data) {
+                console.error('Newsletter admin draft failed:', draft.error);
+                return json({ error: describe('Luonnoksen luonti', draft.error ?? {}) }, 502);
+            }
+            const { data, error } = await resend.broadcasts.send(draft.data.id, scheduledAt ? { scheduledAt } : undefined);
             if (error) {
-                console.error('Newsletter admin Uutiskirjeen lähetys failed:', error);
-                return json({ error: describe('Uutiskirjeen lähetys', error) }, 502);
+                console.error('Newsletter admin send failed:', error);
+                return json({ error: describe(`Lähetys (luonnos ${draft.data.id} löytyy Resendin Broadcasts-näkymästä)`, error) }, 502);
             }
             return json({ ok: true, id: data?.id, scheduledAt: scheduledAt ?? null });
         }
