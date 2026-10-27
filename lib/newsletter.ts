@@ -12,8 +12,12 @@ export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 // Every confirmed subscriber goes to the main segment; a per-language segment is optional.
+// Tolerates spaces and quotes pasted into the Vercel field around the id.
+export const cleanId = (value: string | undefined) => (value ?? '').trim().replace(/^["']|["']$/g, '').trim();
+export const isUuid = (value: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
+
 export function segmentIds(locale: NewsletterLocale): string[] {
-    const ids = [process.env.NEWSLETTER_SEGMENT_ID, process.env[`NEWSLETTER_SEGMENT_ID_${locale.toUpperCase()}`]];
+    const ids = [cleanId(process.env.NEWSLETTER_SEGMENT_ID), cleanId(process.env[`NEWSLETTER_SEGMENT_ID_${locale.toUpperCase()}`])];
     return [...new Set(ids.filter((id): id is string => Boolean(id)))];
 }
 

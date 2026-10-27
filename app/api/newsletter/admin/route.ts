@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { EMAIL_RE, NEWSLETTER_FROM, addSubscriber, passwordMatches, segmentIds } from '@/lib/newsletter';
+import { EMAIL_RE, NEWSLETTER_FROM, addSubscriber, cleanId, isUuid, passwordMatches, segmentIds } from '@/lib/newsletter';
 
 const MAX_HTML = 900 * 1024;
 
@@ -23,10 +23,16 @@ export async function POST(request: NextRequest) {
     if (!process.env.RESEND_API_KEY) return json({ error: 'RESEND_API_KEY puuttuu' }, 500);
 
     const resend = new Resend(process.env.RESEND_API_KEY);
-    const segmentId = (typeof body.segmentId === 'string' && body.segmentId.trim()) || process.env.NEWSLETTER_SEGMENT_ID;
+    const segmentId = cleanId(process.env.NEWSLETTER_SEGMENT_ID);
+    // A segment id is a UUID like 78261eea-8f8b-4381-83c6-79fa7120f1cf; a name or audience id is not.
+    const badSegmentId =
+        segmentId && !isUuid(segmentId)
+            ? `NEWSLETTER_SEGMENT_ID ei ole segmentin ID (nyt: "${segmentId.slice(0, 4)}…", ${segmentId.length} merkkiä). Kopioi ID Resendistä: Audience → Segments → segmentti. Oikea ID on muotoa 78261eea-8f8b-4381-83c6-79fa7120f1cf (36 merkkiä). Tallenna ja tee Vercelissä Redeploy.`
+            : null;
 
     try {
         if (body.action === 'check') {
+            if (badSegmentId) return json({ ok: true, from: NEWSLETTER_FROM, segmentConfigured: true, segment: { error: badSegmentId } });
             // Report the segment's name and size so a wrong id or missing permission is visible at once.
             let segment: { name?: string; subscribers?: number; hasMore?: boolean; error?: string } = {};
             if (segmentId) {
@@ -48,6 +54,7 @@ export async function POST(request: NextRequest) {
         }
 
         if (body.action === 'add') {
+            if (badSegmentId) return json({ error: badSegmentId }, 400);
             // Same steps as the confirm link, with the Resend error shown: for adding subscribers by hand
             // and for finding out why confirmations fail.
             const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
@@ -100,6 +107,7 @@ export async function POST(request: NextRequest) {
         }
 
         if (body.action === 'send') {
+            if (badSegmentId) return json({ error: badSegmentId }, 400);
             if (!segmentId) return json({ error: 'NEWSLETTER_SEGMENT_ID puuttuu' }, 400);
             if (!html.includes('{{{RESEND_UNSUBSCRIBE_URL}}}')) {
                 return json({ error: 'HTML:stä puuttuu peruutuslinkki {{{RESEND_UNSUBSCRIBE_URL}}} – se on lain mukaan pakollinen' }, 400);
