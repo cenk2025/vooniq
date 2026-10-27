@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-// Initialize Resend with API key from environment variable (secure!)
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 // Set RESEND_FROM to an address on a domain verified in Resend (e.g. "Voon IQ <info@voon.fi>").
 // Without it we fall back to Resend's shared sandbox sender, which is likely to land in spam.
 const FROM_ADDRESS = process.env.RESEND_FROM || 'Voon IQ <onboarding@resend.dev>';
 
 export async function POST(request: NextRequest) {
     try {
+        // Created per request: the SDK throws at construction when the key is missing, which would break the build.
+        const resend = new Resend(process.env.RESEND_API_KEY);
+
         // Parse request body
         const body = await request.json();
         const { company, name, email, need, message } = body;

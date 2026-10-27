@@ -12,6 +12,7 @@ import { ContactSection } from '@/components/ContactSection';
 import { FAQSection } from '@/components/FAQSection';
 import { Footer } from '@/components/Footer';
 import { CookieConsent } from '@/components/CookieConsent';
+import { NewsletterNotice } from '@/components/Newsletter';
 import Chatbot from '@/components/Chatbot';
 
 export function HomePage() {
@@ -33,6 +34,7 @@ export function HomePage() {
 
       <Footer />
       <CookieConsent />
+      <NewsletterNotice />
       <Chatbot />
     </div>
   );

@@ -4,8 +4,8 @@ export type LegalSection = { heading: string; paragraphs?: string[]; list?: stri
 export type LegalDoc = { title: string; updated: string; intro: string; sections: LegalSection[] };
 export type LegalDocId = 'privacy' | 'terms';
 
-const UPDATED_FI = 'Päivitetty 25.10.2026';
-const UPDATED_EN = 'Updated 25 October 2026';
+const UPDATED_FI = 'Päivitetty 27.10.2026';
+const UPDATED_EN = 'Updated 27 October 2026';
 
 const CONTROLLER_FI = [
   'VOON IQ (perustettavana oleva yhtiö)',
@@ -39,6 +39,7 @@ export const legalDocs: Record<LegalDocId, Record<Locale, LegalDoc>> = {
           heading: '2. Mitä tietoja käsittelemme ja miksi',
           paragraphs: [
             'Yhteydenottolomake. Kun lähetät lomakkeen, käsittelemme antamiasi tietoja: organisaatio, nimi, sähköpostiosoite, kiinnostuksen kohde ja viesti. Käytämme tietoja yhteydenottoosi vastaamiseen, tarjousten laatimiseen ja asiakassuhteen hoitamiseen. Käsittelyn peruste on oikeutettu etumme vastata meille osoitettuihin yhteydenottoihin sekä sopimusta edeltävät toimenpiteet (GDPR 6 artiklan 1 kohdan b ja f alakohdat).',
+            'Uutiskirje. Kun tilaat uutiskirjeen, käsittelemme sähköpostiosoitettasi, kielivalintaasi sekä tilauksen ja vahvistuksen ajankohtaa. Tilaus vahvistetaan sähköpostiin lähetettävällä linkillä, eikä osoitetta lisätä postituslistalle ennen vahvistusta. Lähetämme uutiskirjeitä noin kerran kuukaudessa. Käsittelyn peruste on suostumuksesi (6 artiklan 1 kohdan a alakohta). Voit peruuttaa suostumuksesi milloin tahansa jokaisen uutiskirjeen lopussa olevasta linkistä tai kirjoittamalla osoitteeseen info@voon.fi.',
             'Tekoälyavustaja Sofia. Chat-ikkunaan kirjoittamasi viestit välitetään tekoälypalvelulle vastauksen tuottamista varten. Emme tallenna keskusteluja omiin järjestelmiimme: keskustelu säilyy vain selaimesi muistissa ja katoaa, kun suljet tai lataat sivun uudelleen. Käytämme IP-osoitettasi hetkellisesti palvelun väärinkäytön estämiseen (pyyntöjen määrän rajoitus, säilytys enintään 10 minuuttia). Käsittelyn peruste on oikeutettu etumme vastata kävijöiden kysymyksiin ja suojata palvelua (6 artiklan 1 kohdan f alakohta). Älä kirjoita chat-ikkunaan arkaluonteisia henkilötietoja.',
             'Tekniset lokitiedot. Sivuston palvelin tallentaa teknisiä tietoja, kuten IP-osoitteen, selaimen tyypin, ajankohdan ja pyydetyn sivun. Tietoja käytetään sivuston toiminnan ja tietoturvan varmistamiseen. Peruste on oikeutettu etumme (6 artiklan 1 kohdan f alakohta).',
           ],
@@ -63,7 +64,7 @@ export const legalDocs: Record<LegalDocId, Record<Locale, LegalDoc>> = {
           ],
           list: [
             'Vercel Inc. (Yhdysvallat) – sivuston ylläpito ja tekniset lokit',
-            'Resend (Yhdysvallat) – yhteydenottolomakkeen viestien välitys sähköpostiimme',
+            'Resend (Yhdysvallat) – yhteydenottolomakkeen viestien välitys sähköpostiimme sekä uutiskirjeen tilaajalista ja lähetykset',
             'NVIDIA Corporation (Yhdysvallat) – tekoälymallin rajapinta chat-avustajan vastauksia varten',
             'Sähköpostipalveluntarjoajamme – vastaanotettujen viestien säilytys',
           ],
@@ -79,6 +80,7 @@ export const legalDocs: Record<LegalDocId, Record<Locale, LegalDoc>> = {
           list: [
             'Yhteydenotot: enintään 24 kuukautta viimeisestä yhteydenpidosta, ellei asiakassuhdetta synny.',
             'Asiakassuhteen tiedot: asiakassuhteen ajan ja sen jälkeen lain edellyttämän ajan (esimerkiksi kirjanpitolain mukaiset tositteet 6 vuotta).',
+            'Uutiskirjeen tilaajatiedot: niin kauan kuin tilaus on voimassa. Perutun tilauksen osoite säilytetään estolistalla, jotta sinulle ei lähetetä viestejä vahingossa uudelleen; voit pyytää myös sen poistamista.',
             'Chat-keskustelut: emme säilytä. IP-osoite väärinkäytön estoa varten enintään 10 minuuttia.',
             'Tekniset lokit: palveluntarjoajan käytännön mukaisesti, tyypillisesti lyhyen ajan.',
           ],
@@ -144,6 +146,7 @@ export const legalDocs: Record<LegalDocId, Record<Locale, LegalDoc>> = {
           paragraphs: [
             'Contact form. When you submit the form, we process the details you provide: organisation, name, email address, area of interest and message. We use them to reply to you, prepare offers and manage a customer relationship. The legal bases are our legitimate interest in answering enquiries and steps taken prior to entering into a contract (GDPR Article 6(1)(b) and (f)).',
             'AI assistant Sofia. Messages you type in the chat window are sent to an AI service to generate a reply. We do not store conversations in our own systems: the conversation exists only in your browser memory and disappears when you close or reload the page. We use your IP address briefly to prevent abuse (rate limiting, kept for at most 10 minutes). The legal basis is our legitimate interest in answering visitors\' questions and protecting the service (Article 6(1)(f)). Please do not enter sensitive personal data in the chat.',
+            'Newsletter. When you subscribe to the newsletter, we process your email address, your language and the time of subscription and confirmation. The subscription is confirmed through a link sent to your email; your address is not added to the mailing list before you confirm. We send the newsletter about once a month. The legal basis is your consent (Article 6(1)(a)). You can withdraw your consent at any time with the link at the end of every newsletter or by writing to info@voon.fi.',
             'Technical logs. The hosting server records technical data such as IP address, browser type, time and requested page to keep the site running and secure. The legal basis is our legitimate interest (Article 6(1)(f)).',
           ],
         },
@@ -163,7 +166,7 @@ export const legalDocs: Record<LegalDocId, Record<Locale, LegalDoc>> = {
           paragraphs: ['We do not sell personal data or disclose it for marketing. The following providers process data on our behalf:'],
           list: [
             'Vercel Inc. (United States) – hosting and technical logs',
-            'Resend (United States) – delivering contact form messages to our email',
+            'Resend (United States) – delivering contact form messages to our email, and the newsletter subscriber list and mailings',
             'NVIDIA Corporation (United States) – AI model API for the chat assistant',
             'Our email provider – storing received messages',
           ],
@@ -179,6 +182,7 @@ export const legalDocs: Record<LegalDocId, Record<Locale, LegalDoc>> = {
           list: [
             'Enquiries: up to 24 months after the last contact, unless a customer relationship is formed.',
             'Customer data: for the duration of the relationship and afterwards as required by law (e.g. accounting records 6 years under the Finnish Accounting Act).',
+            'Newsletter subscribers: for as long as the subscription is active. After you unsubscribe, the address is kept on a suppression list so that you are not emailed again by mistake; you can also ask us to delete it.',
             'Chat conversations: not stored. IP address for abuse prevention at most 10 minutes.',
             'Technical logs: according to the hosting provider\'s practice, typically a short period.',
           ],

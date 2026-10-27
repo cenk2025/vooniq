@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Uutiskirje – VOON IQ</title>
+<link rel="icon" href="/favicon.ico">
+<style>
+  :root {
+    --bg: #0d1321; --panel: #121a2a; --panel-2: #0f1626; --text: #e8edf5; --muted: #9aa5b8;
+    --border: rgba(232, 237, 245, 0.1); --border-strong: rgba(232, 237, 245, 0.18);
+    --accent: #ff2a3a; --accent-2: #ff4184; --ok: #3ddc97; --err: #ff6b6b;
+    color-scheme: dark;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f6f8fb; --panel: #ffffff; --panel-2: #f1f4f8; --text: #0b0f16; --muted: #5b6475;
+      --border: rgba(15, 23, 42, 0.1); --border-strong: rgba(15, 23, 42, 0.18); color-scheme: light;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 Inter, system-ui, -apple-system, Segoe UI, sans-serif; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 28px 16px 60px; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+  header h1 { margin: 0; font-size: 20px; letter-spacing: 0.02em; }
+  header h1 b { background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .muted { color: var(--muted); }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 18px; padding: 20px; }
+  .grid { display: grid; gap: 20px; }
+  @media (min-width: 980px) { .grid { grid-template-columns: 420px 1fr; align-items: start; } }
+  label { display: block; font-size: 13px; color: var(--muted); margin: 14px 0 6px; }
+  input, textarea { width: 100%; padding: 11px 13px; border-radius: 12px; border: 1px solid var(--border-strong); background: var(--panel-2); color: var(--text); font: inherit; }
+  input:focus, textarea:focus { outline: none; border-color: var(--accent-2); }
+  textarea { min-height: 140px; font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; resize: vertical; }
+  .row { display: flex; gap: 8px; }
+  .row > * { flex: 1; }
+  button { cursor: pointer; border: 0; border-radius: 999px; padding: 11px 18px; font: inherit; font-weight: 600; }
+  button:disabled { opacity: 0.5; cursor: progress; }
+  .primary { background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: #fff; }
+  .ghost { background: transparent; color: var(--text); border: 1px solid var(--border-strong); }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .msg { margin-top: 14px; padding: 11px 14px; border-radius: 12px; font-size: 14px; display: none; }
+  .msg.ok { display: block; background: rgba(61, 220, 151, 0.12); color: var(--ok); }
+  .msg.err { display: block; background: rgba(255, 107, 107, 0.12); color: var(--err); }
+  .checks { list-style: none; padding: 0; margin: 14px 0 0; font-size: 13px; }
+  .checks li { padding: 3px 0; }
+  .checks li::before { content: '•'; margin-right: 8px; }
+  .checks li.ok::before { content: '✓'; color: var(--ok); }
+  .checks li.bad::before { content: '✕'; color: var(--err); }
+  iframe { width: 100%; height: 760px; border: 1px solid var(--border); border-radius: 14px; background: #fff; }
+  .preview-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .seg { display: inline-flex; border: 1px solid var(--border-strong); border-radius: 999px; padding: 3px; }
+  .seg button { padding: 6px 12px; background: transparent; color: var(--muted); font-weight: 500; }
+  .seg button.on { background: var(--panel-2); color: var(--text); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 500; }
+  .pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; border: 1px solid var(--border-strong); }
+  .pill.sent { color: var(--ok); } .pill.queued { color: #f5b942; }
+  #login { max-width: 420px; margin: 12vh auto 0; }
+  .hidden { display: none !important; }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>VOON <b>IQ</b> · Uutiskirje</h1>
+    <button class="ghost hidden" id="logout" type="button">Kirjaudu ulos</button>
+  </header>
+
+  <form id="login" class="card">
+    <h2 style="margin:0 0 6px;font-size:18px">Kirjaudu</h2>
+    <p class="muted" style="margin:0">Salasana on Vercelin ympäristömuuttujassa <code>NEWSLETTER_ADMIN_PASSWORD</code>.</p>
+    <label for="password">Salasana</label>
+    <input id="password" type="password" autocomplete="current-password" required>
+    <div class="actions"><button class="primary" type="submit">Jatka</button></div>
+    <div class="msg" id="login-msg"></div>
+  </form>
+
+  <main id="app" class="hidden">
+    <div class="grid">
+      <section class="card">
+        <h2 style="margin:0;font-size:17px">Uusi lähetys</h2>
+        <p class="muted" style="margin:4px 0 0;font-size:13px">Lähettäjä: <span id="from">–</span></p>
+
+        <label for="file">HTML-tiedosto</label>
+        <input id="file" type="file" accept=".html,.htm,text/html">
+        <label for="html">…tai liitä HTML</label>
+        <textarea id="html" spellcheck="false" placeholder="<!doctype html>…"></textarea>
+        <ul class="checks" id="checks"></ul>
+
+        <label for="subject">Aihe</label>
+        <input id="subject" maxlength="200" placeholder="VOON IQ – Uutiskirje lokakuu 2026">
+        <label for="preview">Esikatseluteksti (näkyy postilaatikossa aiheen vieressä)</label>
+        <input id="preview" maxlength="200">
+        <label for="name">Sisäinen nimi (valinnainen)</label>
+        <input id="name" maxlength="120" placeholder="Lokakuu 2026">
+
+        <label for="test-to">Testiosoite</label>
+        <div class="row">
+          <input id="test-to" type="email" placeholder="info@voon.fi">
+          <button class="ghost" id="test" type="button" style="flex:0 0 auto">Lähetä testi</button>
+        </div>
+
+        <label for="when">Ajasta (tyhjä = lähetä heti)</label>
+        <input id="when" type="datetime-local">
+        <p class="hint">Aika on selaimesi aikavyöhykkeellä. Ajastetun lähetyksen voi perua Resendin Broadcasts-näkymästä.</p>
+
+        <div class="actions">
+          <button class="primary" id="send" type="button">Lähetä tilaajille</button>
+        </div>
+        <div class="msg" id="msg"></div>
+      </section>
+
+      <section class="card">
+        <div class="preview-head">
+          <h2 style="margin:0;font-size:17px">Esikatselu</h2>
+          <div class="seg"><button type="button" class="on" data-w="100%">Työpöytä</button><button type="button" data-w="390px">Mobiili</button></div>
+        </div>
+        <div style="display:flex;justify-content:center"><iframe id="frame" sandbox="" title="Esikatselu"></iframe></div>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:20px">
+      <div class="preview-head">
+        <h2 style="margin:0;font-size:17px">Lähetykset</h2>
+        <button class="ghost" id="refresh" type="button">Päivitä</button>
+      </div>
+      <div style="overflow-x:auto"><table><thead><tr><th>Nimi</th><th>Tila</th><th>Luotu</th><th>Ajastettu</th><th>Lähetetty</th></tr></thead><tbody id="list"><tr><td colspan="5" class="muted">Ladataan…</td></tr></tbody></table></div>
+    </section>
+  </main>
+</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const store = {
+    get: (k) => { try { return sessionStorage.getItem(k); } catch { return null; } },
+    set: (k, v) => { try { v == null ? sessionStorage.removeItem(k) : sessionStorage.setItem(k, v); } catch { /* private mode */ } },
+  };
+  let password = store.get('voon_nl_pw');
+
+  async function api(action, extra = {}) {
+    const res = await fetch('/api/newsletter/admin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password, action, ...extra }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw Object.assign(new Error(data.error || `HTTP ${res.status}`), { status: res.status });
+    return data;
+  }
+
+  function show(el, ok, text) { el.className = 'msg ' + (ok ? 'ok' : 'err'); el.textContent = text; }
+
+  async function login() {
+    try {
+      const info = await api('check');
+      $('from').textContent = info.from + (info.segmentConfigured ? '' : ' · ⚠ NEWSLETTER_SEGMENT_ID puuttuu');
+      store.set('voon_nl_pw', password);
+      $('login').classList.add('hidden'); $('app').classList.remove('hidden'); $('logout').classList.remove('hidden');
+      loadList();
+    } catch (e) {
+      store.set('voon_nl_pw', null);
+      if (e.status) show($('login-msg'), false, e.message);
+    }
+  }
+
+  $('login').addEventListener('submit', (e) => { e.preventDefault(); password = $('password').value; login(); });
+  $('logout').addEventListener('click', () => { store.set('voon_nl_pw', null); location.reload(); });
+
+  // ---- Template ----
+  function updatePreview() {
+    const html = $('html').value;
+    $('frame').srcdoc = html.replaceAll('{{{RESEND_UNSUBSCRIBE_URL}}}', '#');
+    const title = (html.match(/<title>([\s\S]*?)<\/title>/i) || [])[1];
+    if (title && !$('subject').value) $('subject').value = title.trim();
+    const pre = html.match(/<div[^>]*display:\s*none[^>]*>([^<]{10,})/i);
+    if (pre && !$('preview').value) {
+      $('preview').value = pre[1].replace(/&#?\w+;|[‌ ͏ ]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 150);
+    }
+    const kb = Math.round(new Blob([html]).size / 1024);
+    const checks = html.trim() ? [
+      [html.includes('{{{RESEND_UNSUBSCRIBE_URL}}}'), 'Peruutuslinkki {{{RESEND_UNSUBSCRIBE_URL}}} löytyy'],
+      [!/src=["']data:/i.test(html), 'Ei data:-kuvia (Gmail estää ne)'],
+      [!/src=["']http:\/\//i.test(html), 'Kuvat https-osoitteista'],
+      [kb < 100, `Koko ${kb} kt ${kb < 100 ? '' : '– Gmail leikkaa yli 102 kt viestit'}`],
+    ] : [];
+    $('checks').innerHTML = checks.map(([ok, t]) => `<li class="${ok ? 'ok' : 'bad'}"></li>`).join('');
+    [...$('checks').children].forEach((li, i) => { li.append(checks[i][1]); });
+  }
+  $('html').addEventListener('input', updatePreview);
+  $('file').addEventListener('change', async () => {
+    const f = $('file').files[0];
+    if (!f) return;
+    $('html').value = await f.text();
+    $('subject').value = ''; $('preview').value = '';
+    updatePreview();
+  });
+  document.querySelectorAll('.seg button').forEach((b) => b.addEventListener('click', () => {
+    document.querySelectorAll('.seg button').forEach((x) => x.classList.toggle('on', x === b));
+    $('frame').style.width = b.dataset.w;
+  }));
+
+  function payload() {
+    return { html: $('html').value, subject: $('subject').value, previewText: $('preview').value, name: $('name').value };
+  }
+
+  async function run(btn, fn) {
+    btn.disabled = true;
+    try { await fn(); } catch (e) { show($('msg'), false, e.message); } finally { btn.disabled = false; }
+  }
+
+  $('test').addEventListener('click', (e) => run(e.currentTarget, async () => {
+    await api('test', { ...payload(), testTo: $('test-to').value });
+    show($('msg'), true, `Testiviesti lähetetty osoitteeseen ${$('test-to').value}.`);
+  }));
+
+  $('send').addEventListener('click', (e) => run(e.currentTarget, async () => {
+    const when = $('when').value ? new Date($('when').value) : null;
+    if (when && when.getTime() < Date.now() + 60000) throw new Error('Ajastusajan pitää olla tulevaisuudessa.');
+    const question = when
+      ? `Ajastetaanko uutiskirje "${$('subject').value}" lähtemään kaikille tilaajille ${when.toLocaleString('fi-FI')}?`
+      : `Lähetetäänkö uutiskirje "${$('subject').value}" NYT kaikille tilaajille?`;
+    if (!confirm(question)) return;
+    const r = await api('send', { ...payload(), scheduledAt: when ? when.toISOString() : '' });
+    show($('msg'), true, when ? `Ajastettu (${when.toLocaleString('fi-FI')}). ID: ${r.id}` : `Lähetys aloitettu. ID: ${r.id}`);
+    loadList();
+  }));
+
+  // ---- Broadcast list ----
+  const fmt = (v) => (v ? new Date(v).toLocaleString('fi-FI', { dateStyle: 'short', timeStyle: 'short' }) : '–');
+  async function loadList() {
+    const tbody = $('list');
+    try {
+      const { broadcasts } = await api('list');
+      tbody.replaceChildren();
+      if (!broadcasts.length) { tbody.innerHTML = '<tr><td colspan="5" class="muted">Ei vielä lähetyksiä.</td></tr>'; return; }
+      for (const b of broadcasts) {
+        const tr = document.createElement('tr');
+        [b.name || b.subject || b.id, b.status, fmt(b.created_at), fmt(b.scheduled_at), fmt(b.sent_at)].forEach((v, i) => {
+          const td = document.createElement('td');
+          if (i === 1) { const s = document.createElement('span'); s.className = 'pill ' + v; s.textContent = v; td.append(s); }
+          else td.textContent = v;
+          tr.append(td);
+        });
+        tbody.append(tr);
+      }
+    } catch (e) {
+      tbody.innerHTML = '<tr><td colspan="5"></td></tr>';
+      tbody.querySelector('td').textContent = 'Virhe: ' + e.message;
+    }
+  }
+  $('refresh').addEventListener('click', loadList);
+
+  if (password) login();
+})();
+</script>
+</body>
+</html>

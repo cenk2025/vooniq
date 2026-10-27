@@ -34,3 +34,17 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Uutiskirje
+
+Tilaajat liittyvät sivun alaosan lomakkeella (fi/en). Tilaus vahvistetaan kahdessa vaiheessa:
+lomake lähettää vahvistuslinkin, ja vasta linkin klikkaus lisää osoitteen Resendin segmenttiin
+(`/api/newsletter/subscribe` → `/api/newsletter/confirm`). Lähetykset tehdään sivulta
+`/uutiskirje-admin.html`, joka on suojattu salasanalla. Sivulla voi esikatsella, lähettää testin,
+lähettää heti tai ajastaa, ja se näyttää aiemmat lähetykset. Ympäristömuuttujat on kuvattu
+tiedostossa `env.example`.
+
+Uutiskirjepohjan säännöt (`newsletter/`):
+- Kuvien on oltava https-osoitteissa (esim. `public/newsletter/<kk>/`). Gmail estää `data:`-kuvat.
+- Peruutuslinkki on `href="{{{RESEND_UNSUBSCRIBE_URL}}}"`.
+- Koko on alle 100 kt, koska Gmail leikkaa pidemmät viestit.

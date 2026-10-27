@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useLocale } from './LocaleProvider';
 import { useTheme } from './ThemeProvider';
+import { NewsletterForm } from './Newsletter';
 
 export function Footer() {
     const { t } = useLocale();
@@ -65,6 +66,7 @@ export function Footer() {
                         </nav>
                     ))}
                 </div>
+                <NewsletterForm />
                 <div className="pt-5 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                     <p>&copy; {currentYear} VOON IQ Oy. All rights reserved.</p>
                     <p className="flex gap-4">
