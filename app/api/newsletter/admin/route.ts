@@ -4,6 +4,10 @@ import { EMAIL_RE, NEWSLETTER_FROM, passwordMatches } from '@/lib/newsletter';
 
 const MAX_HTML = 900 * 1024;
 
+// Resend's own messages can be as vague as "Something went wrong": add the step, error name and status.
+const describe = (step: string, error: { name?: string; message?: string; statusCode?: number | null }) =>
+    `${step}: ${error.message || 'tuntematon virhe'} (${error.name || 'error'}${error.statusCode ? ', ' + error.statusCode : ''})`;
+
 const json = (data: unknown, status = 200) =>
     NextResponse.json(data, { status, headers: { 'Cache-Control': 'no-store' } });
 
@@ -28,11 +32,11 @@ export async function POST(request: NextRequest) {
             if (segmentId) {
                 const found = await resend.segments.get(segmentId);
                 if (found.error) {
-                    segment = { error: found.error.message };
+                    segment = { error: describe('Segmentin haku', found.error) };
                 } else {
                     const contacts = await resend.contacts.list({ segmentId, limit: 100 });
                     segment = contacts.error
-                        ? { name: found.data?.name, error: contacts.error.message }
+                        ? { name: found.data?.name, error: describe('Tilaajien haku', contacts.error) }
                         : {
                               name: found.data?.name,
                               subscribers: contacts.data?.data.filter((c) => !c.unsubscribed).length,
@@ -45,7 +49,10 @@ export async function POST(request: NextRequest) {
 
         if (body.action === 'list') {
             const { data, error } = await resend.broadcasts.list();
-            if (error) return json({ error: error.message }, 502);
+            if (error) {
+                console.error('Newsletter admin Lähetyslistan haku failed:', error);
+                return json({ error: describe('Lähetyslistan haku', error) }, 502);
+            }
             return json({ broadcasts: data?.data ?? [] });
         }
 
@@ -70,7 +77,10 @@ export async function POST(request: NextRequest) {
                 subject: `[TESTI] ${subject}`,
                 html: testHtml,
             });
-            if (error) return json({ error: error.message }, 502);
+            if (error) {
+                console.error('Newsletter admin Testiviestin lähetys failed:', error);
+                return json({ error: describe('Testiviestin lähetys', error) }, 502);
+            }
             return json({ ok: true, id: data?.id });
         }
 
@@ -93,13 +103,16 @@ export async function POST(request: NextRequest) {
                 send: true,
                 scheduledAt,
             });
-            if (error) return json({ error: error.message }, 502);
+            if (error) {
+                console.error('Newsletter admin Uutiskirjeen lähetys failed:', error);
+                return json({ error: describe('Uutiskirjeen lähetys', error) }, 502);
+            }
             return json({ ok: true, id: data?.id, scheduledAt: scheduledAt ?? null });
         }
 
         return json({ error: 'Unknown action' }, 400);
     } catch (error) {
         console.error('Newsletter admin error:', error);
-        return json({ error: 'Internal server error' }, 500);
+        return json({ error: `Palvelinvirhe: ${(error as Error).message}` }, 500);
     }
 }
