@@ -36,15 +36,27 @@ export async function GET(request: NextRequest) {
 
         if (created.error) {
             // Most likely the contact already exists (earlier subscriber, or one who unsubscribed and is
-            // now opting in again): re-activate it and make sure it is in the segment(s).
+            // now opting in again): re-activate it.
             const updated = await resend.contacts.update({ email, unsubscribed: false });
             if (updated.error) {
                 console.error('Newsletter confirm failed:', created.error, updated.error);
                 return back('error');
             }
-            for (const segmentId of segments) {
-                const added = await resend.contacts.segments.add({ email, segmentId });
-                if (added.error) console.warn('Segment add skipped:', segmentId, added.error.message);
+        }
+
+        // Do not trust the create call alone: check the contact really is in every segment and add it
+        // where it is missing, so a wrong segment id or API key permission shows up as an error.
+        const listed = await resend.contacts.segments.list({ email, limit: 100 });
+        if (listed.error) {
+            console.error('Newsletter confirm: cannot read contact segments:', listed.error);
+            return back('error');
+        }
+        const have = new Set(listed.data?.data.map((segment) => segment.id));
+        for (const segmentId of segments.filter((id) => !have.has(id))) {
+            const added = await resend.contacts.segments.add({ email, segmentId });
+            if (added.error) {
+                console.error('Newsletter confirm: adding to segment failed:', segmentId, added.error);
+                return back('error');
             }
         }
 

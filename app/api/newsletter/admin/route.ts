@@ -23,7 +23,24 @@ export async function POST(request: NextRequest) {
 
     try {
         if (body.action === 'check') {
-            return json({ ok: true, from: NEWSLETTER_FROM, segmentConfigured: Boolean(segmentId) });
+            // Report the segment's name and size so a wrong id or missing permission is visible at once.
+            let segment: { name?: string; subscribers?: number; hasMore?: boolean; error?: string } = {};
+            if (segmentId) {
+                const found = await resend.segments.get(segmentId);
+                if (found.error) {
+                    segment = { error: found.error.message };
+                } else {
+                    const contacts = await resend.contacts.list({ segmentId, limit: 100 });
+                    segment = contacts.error
+                        ? { name: found.data?.name, error: contacts.error.message }
+                        : {
+                              name: found.data?.name,
+                              subscribers: contacts.data?.data.filter((c) => !c.unsubscribed).length,
+                              hasMore: contacts.data?.has_more,
+                          };
+                }
+            }
+            return json({ ok: true, from: NEWSLETTER_FROM, segmentConfigured: Boolean(segmentId), segment });
         }
 
         if (body.action === 'list') {
