@@ -12,7 +12,7 @@ export function LegalPage({ doc }: { doc: LegalDocId }) {
     return (
         <div className="relative min-h-screen">
             <Header />
-            <main className="pt-14">
+            <main id="main" className="pt-14">
                 <article className="container-apple max-w-3xl py-20 md:py-28">
                     <p className="t-eyebrow">{d.updated}</p>
                     <h1 className="t-headline mt-3">{d.title}</h1>

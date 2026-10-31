@@ -24,7 +24,7 @@ export function BusinessSection() {
                     />
                     <div className="glass absolute left-6 right-6 bottom-6 md:left-auto md:right-8 md:bottom-8 md:w-[300px] rounded-[28px] p-5" aria-hidden="true">
                         <p className="text-[0.75rem] font-semibold text-black/50">{s('bp_w_title')}</p>
-                        <p className="mt-1 font-semibold">Keski-Suomen Tukku Oy</p>
+                        <p className="mt-1 font-semibold">Esimerkki Oy</p>
                         <dl className="mt-3 space-y-1.5 text-[0.9375rem]">
                             <div className="flex justify-between"><dt className="text-black/55">{s('bp_w_amount_label')}</dt><dd className="font-semibold">248,00 €</dd></div>
                             <div className="flex justify-between"><dt className="text-black/55">{s('bp_w_due_label')}</dt><dd className="font-semibold">14.11.2026</dd></div>

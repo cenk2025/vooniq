@@ -55,7 +55,6 @@ export function StructuredData() {
                 '@type': 'Organization',
                 '@id': `${SITE}/#organization`,
                 name: 'VOON IQ',
-                legalName: 'VOON IQ Oy',
                 url: SITE,
                 logo: {
                     '@type': 'ImageObject',

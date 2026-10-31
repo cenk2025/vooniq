@@ -68,10 +68,11 @@ export function Footer() {
                 </div>
                 <NewsletterForm />
                 <div className="pt-5 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                    <p>&copy; {currentYear} VOON IQ Oy. All rights reserved.</p>
+                    <p>&copy; {currentYear} VOON IQ · Jyväskylä. {s('footer_rights')}</p>
                     <p className="flex gap-4">
                         <a href="/tietosuoja" className="hover:text-fg hover:underline underline-offset-2">{s('footer_privacy')}</a>
                         <a href="/kayttoehdot" className="hover:text-fg hover:underline underline-offset-2">{s('footer_terms')}</a>
+                        <a href="/saavutettavuus" className="hover:text-fg hover:underline underline-offset-2">{s('footer_accessibility')}</a>
                     </p>
                 </div>
             </div>

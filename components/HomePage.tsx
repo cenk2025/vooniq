@@ -20,7 +20,7 @@ export function HomePage() {
     <div className="relative min-h-screen">
       <Header />
 
-      <main>
+      <main id="main">
         <Hero />
         <IntroSection />
         <ProductsSection />

@@ -2,10 +2,12 @@ import type { Locale } from './i18n';
 
 export type LegalSection = { heading: string; paragraphs?: string[]; list?: string[]; note?: string };
 export type LegalDoc = { title: string; updated: string; intro: string; sections: LegalSection[] };
-export type LegalDocId = 'privacy' | 'terms';
+export type LegalDocId = 'privacy' | 'terms' | 'accessibility';
 
 const UPDATED_FI = 'Päivitetty 27.10.2026';
 const UPDATED_EN = 'Updated 27 October 2026';
+const A11Y_UPDATED_FI = 'Päivitetty 31.10.2026';
+const A11Y_UPDATED_EN = 'Updated 31 October 2026';
 
 const CONTROLLER_FI = [
   'VOON IQ (perustettavana oleva yhtiö)',
@@ -341,6 +343,112 @@ export const legalDocs: Record<LegalDocId, Record<Locale, LegalDoc>> = {
           ],
         },
         { heading: '11. Contact', paragraphs: ['Questions about these terms: info@voon.fi.'] },
+      ],
+    },
+  },
+  accessibility: {
+    fi: {
+      title: 'Saavutettavuusseloste',
+      updated: A11Y_UPDATED_FI,
+      intro:
+        'Haluamme, että voon.fi on kaikkien käytettävissä. Tämä seloste kertoo, miten sivusto täyttää verkkosisällön saavutettavuusohjeet (WCAG 2.1, taso AA), mitkä puutteet tunnemme ja miten voit antaa palautetta. Seloste koskee voon.fi-sivustoa; tuotteillamme (SkillPath, Talent Factory, BizPulse, Nordway) on omat selosteensa.',
+      sections: [
+        {
+          heading: 'Saavutettavuuden tila',
+          paragraphs: [
+            'Sivusto täyttää WCAG 2.1 AA -vaatimukset osittain. Automaattisessa testauksessa ei löytynyt virheitä, mutta kaikkia toimintoja ei ole vielä arvioitu käsin.',
+          ],
+        },
+        {
+          heading: 'Miten sivusto on arvioitu',
+          paragraphs: [
+            'Arvioimme sivuston itse 31.10.2026. Etusivu ja tietosuojaseloste testattiin automaattisella axe-core-työkalulla (WCAG 2.1 A ja AA) vaaleassa ja tummassa teemassa sekä puhelimen ja tietokoneen näytöillä, ja löydetyt kontrastivirheet korjattiin. Lisäksi tarkistimme käsin näppäimistöllä liikkumisen pääosiin, sisältöön siirtymisen linkin, sivun kielen ja liikkeen vähentämisen asetuksen.',
+          ],
+        },
+        {
+          heading: 'Mitä sivustolla on huomioitu',
+          list: [
+            'Sivun kieli vaihtuu valitun kielen mukaan (suomi tai englanti).',
+            '”Siirry sisältöön” -linkki näppäimistön käyttäjille.',
+            'Tekstien ja taustan kontrasti vähintään 4,5:1 vaaleassa ja tummassa teemassa.',
+            'Liikkeen vähentäminen: jos olet valinnut laitteestasi vähemmän liikettä, sivun animaatiot pysähtyvät.',
+            'Läpinäkyvyyden vähentäminen: lasimaiset pinnat muuttuvat lähes umpinaisiksi, jos laitteesi asetus sitä pyytää.',
+            'Koristekuvilla on tyhjä vaihtoehtoinen teksti, jotta ruudunlukija ohittaa ne.',
+          ],
+        },
+        {
+          heading: 'Tunnetut puutteet',
+          list: [
+            'Tekoälyavustaja Sofian chat-ikkunaa ei ole vielä testattu ruudunlukijoilla.',
+            'Sivustoa ei ole vielä testattu kattavasti ruudunlukijoilla (esim. NVDA, VoiceOver) eikä ulkopuolinen asiantuntija ole arvioinut sitä.',
+            'Ruotsinkielistä versiota ei vielä ole.',
+          ],
+          note: 'Korjaamme puutteet sitä mukaa kuin ne löytyvät, ja päivitämme tämän selosteen.',
+        },
+        {
+          heading: 'Palaute ja yhteystiedot',
+          paragraphs: [
+            'Jos huomaat sivustolla saavutettavuusongelman tai et pääse käsiksi johonkin sisältöön, kerro siitä meille osoitteeseen info@voon.fi. Vastaamme yleensä 1–2 arkipäivän kuluessa ja toimitamme sisällön tarvittaessa toisessa muodossa.',
+          ],
+        },
+        {
+          heading: 'Valvontaviranomainen',
+          paragraphs: [
+            'Jos et ole tyytyväinen saamaasi vastaukseen, voit olla yhteydessä saavutettavuuden valvontaviranomaiseen. Ohjeet löytyvät osoitteesta saavutettavuusvaatimukset.fi.',
+          ],
+        },
+      ],
+    },
+    en: {
+      title: 'Accessibility statement',
+      updated: A11Y_UPDATED_EN,
+      intro:
+        'We want voon.fi to be usable by everyone. This statement describes how the site meets the Web Content Accessibility Guidelines (WCAG 2.1, level AA), which shortcomings we know of and how to give feedback. It covers the voon.fi website; our products (SkillPath, Talent Factory, BizPulse, Nordway) have their own statements.',
+      sections: [
+        {
+          heading: 'Compliance status',
+          paragraphs: [
+            'The site partially meets WCAG 2.1 AA. Automated testing found no errors, but not every feature has been evaluated manually yet.',
+          ],
+        },
+        {
+          heading: 'How the site was evaluated',
+          paragraphs: [
+            'We evaluated the site ourselves on 31 October 2026. The front page and the privacy notice were tested with the automated axe-core tool (WCAG 2.1 A and AA) in the light and dark theme on phone and desktop screens, and the contrast errors found were fixed. We also checked manually keyboard navigation to the main sections, the skip-to-content link, the page language and the reduced-motion setting.',
+          ],
+        },
+        {
+          heading: 'What the site takes into account',
+          list: [
+            'The page language follows the chosen language (Finnish or English).',
+            'A “Skip to content” link for keyboard users.',
+            'Text contrast of at least 4.5:1 in the light and dark theme.',
+            'Reduced motion: if your device asks for less motion, the page animations stop.',
+            'Reduced transparency: glass-like surfaces become almost solid if your device asks for it.',
+            'Decorative images have an empty alternative text so screen readers skip them.',
+          ],
+        },
+        {
+          heading: 'Known shortcomings',
+          list: [
+            'The chat window of the AI assistant Sofia has not yet been tested with screen readers.',
+            'The site has not yet been tested comprehensively with screen readers (e.g. NVDA, VoiceOver) or evaluated by an external expert.',
+            'There is no Swedish version yet.',
+          ],
+          note: 'We fix shortcomings as we find them and update this statement.',
+        },
+        {
+          heading: 'Feedback and contact',
+          paragraphs: [
+            'If you notice an accessibility problem or cannot access some content, let us know at info@voon.fi. We usually reply within 1–2 working days and can provide the content in another format if needed.',
+          ],
+        },
+        {
+          heading: 'Supervisory authority',
+          paragraphs: [
+            'If you are not satisfied with our reply, you can contact the accessibility supervisory authority. Instructions are available at saavutettavuusvaatimukset.fi.',
+          ],
+        },
       ],
     },
   },

@@ -11,9 +11,8 @@ export function IntroSection() {
         <section className="section bg-bg">
             <div className="container-apple">
                 <Reveal as="p" className="t-highlight max-w-4xl">
-                    {t('intro_text_1') as string}
                     <strong>{t('intro_strong') as string}</strong>
-                    {t('intro_text_2') as string}
+                    {t('intro_text') as string}
                 </Reveal>
 
                 <dl className="mt-16 md:mt-24 grid grid-cols-2 md:grid-cols-4 gap-y-10">
@@ -29,6 +28,7 @@ export function IntroSection() {
                         </Reveal>
                     ))}
                 </dl>
+                <p className="mt-10 text-[0.8125rem] text-fg-2">{t('stats_source') as string}</p>
             </div>
         </section>
     );

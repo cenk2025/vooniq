@@ -29,7 +29,7 @@ export function Hero() {
 
             <div className="relative container-wide h-full flex flex-col justify-start pt-28 md:justify-center md:pt-14">
                 <div className="max-w-xl">
-                    <p className="fade-up text-[1.0625rem] font-semibold text-[#e8264f]" style={{ animationDelay: '0.2s' }}>
+                    <p className="fade-up text-[1.0625rem] font-semibold text-[#d81b47]" style={{ animationDelay: '0.2s' }}>
                         {t('hero_eyebrow') as string}
                     </p>
                     <h1 className="fade-up t-hero caret mt-3" style={{ animationDelay: '0.35s' }}>
@@ -39,8 +39,8 @@ export function Hero() {
                         {t('hero_subtitle') as string}
                     </p>
                     <div className="fade-up mt-8 flex flex-wrap items-center gap-3" style={{ animationDelay: '0.65s' }}>
-                        <a href="#products" className="btn btn-primary">{t('hero_cta_primary') as string}</a>
-                        <a href="#contact" className="btn btn-secondary text-[#1d1d1f]">{t('hero_cta_secondary') as string}</a>
+                        <a href="https://tyo.voon.fi" className="btn btn-primary">{t('hero_cta_primary') as string}</a>
+                        <a href="#products" className="btn btn-secondary text-[#1d1d1f]">{t('hero_cta_secondary') as string}</a>
                     </div>
                 </div>
             </div>

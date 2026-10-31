@@ -16,7 +16,6 @@ export function AIServicesSection() {
         price: s(`plan_${n}_price`),
         desc: s(`plan_${n}_desc`),
         features: t(`plan_${n}_features`) as readonly string[],
-        featured: n === 2,
     }));
 
     return (
@@ -54,16 +53,9 @@ export function AIServicesSection() {
                         <Reveal
                             key={p.name}
                             delay={i * 100}
-                            className={`glass-dark rounded-[28px] p-7 flex flex-col ${p.featured ? 'ring-1 ring-[#fd4180]/70' : ''}`}
+                            className="glass-dark rounded-[28px] p-7 flex flex-col"
                         >
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-[1.3125rem] font-semibold">{p.name}</h3>
-                                {p.featured && (
-                                    <span className="rounded-full bg-[linear-gradient(90deg,#fb2b3b,#fd4180)] px-2.5 py-0.5 text-[0.75rem] font-semibold text-white">
-                                        {s('plan_2_badge')}
-                                    </span>
-                                )}
-                            </div>
+                            <h3 className="text-[1.3125rem] font-semibold">{p.name}</h3>
                             <p className="mt-4 text-[2rem] font-semibold tracking-[-0.03em]">{p.price}</p>
                             <p className="mt-1 text-white/60">{p.desc}</p>
                             <ul className="mt-6 space-y-3 flex-1">
@@ -74,13 +66,13 @@ export function AIServicesSection() {
                                     </li>
                                 ))}
                             </ul>
-                            <a href="#contact" className={`btn mt-8 ${p.featured ? 'btn-primary' : 'btn-secondary text-white'}`}>
-                                {s('plan_cta')}
-                            </a>
                         </Reveal>
                     ))}
                 </div>
-                <p className="mt-6 text-[0.8125rem] text-white/45">{s('pricing_note')}</p>
+                <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="text-[0.8125rem] text-white/45">{s('pricing_note')}</p>
+                    <a href="#contact" className="btn btn-primary shrink-0">{s('plan_cta')}</a>
+                </div>
             </div>
         </section>
     );

@@ -99,7 +99,7 @@ export function confirmEmailHtml(locale: NewsletterLocale, link: string): string
 <a href="${escapeHtml(link)}" style="display:inline-block;background:#ff2a3a;color:#ffffff;text-decoration:none;font-weight:bold;padding:14px 26px;border-radius:999px">${t.button}</a>
 <p style="margin:28px 0 0;color:#6b7383;font-size:13px;line-height:1.6">${t.ignore}</p>
 </td></tr></table>
-<p style="color:#8a93a3;font-size:12px;margin-top:18px">VOON IQ Oy · Jyväskylä · voon.fi</p>
+<p style="color:#8a93a3;font-size:12px;margin-top:18px">VOON IQ · Jyväskylä · voon.fi</p>
 </td></tr></table></body></html>`;
 }
 

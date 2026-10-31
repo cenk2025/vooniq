@@ -49,6 +49,12 @@ export function Header() {
 
     return (
         <header className="fixed inset-x-0 top-0 z-50 glass-nav border-b border-black/5 dark:border-white/10">
+            <a
+                href="#main"
+                className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-2 focus:z-[60] focus:rounded-full focus:bg-surface focus:px-4 focus:py-2 focus:text-[0.875rem] focus:font-semibold focus:text-fg focus:shadow"
+            >
+                {t('skip_to_content') as string}
+            </a>
             <div className="container-wide flex h-14 items-center justify-between gap-4">
                 <Link href="/" aria-label="VOON IQ" className="flex items-center rounded-md">
                     <Image

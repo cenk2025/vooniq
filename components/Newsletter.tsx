@@ -65,7 +65,7 @@ export function NewsletterForm() {
                         </button>
                     </div>
                     <label className="flex cursor-pointer items-start gap-2.5 text-[0.75rem] leading-normal">
-                        <input type="checkbox" name="consent" required className="mt-0.5 h-4 w-4 shrink-0 accent-[#e8264f]" />
+                        <input type="checkbox" name="consent" required className="mt-0.5 h-4 w-4 shrink-0 accent-[#d81b47]" />
                         <span>
                             {s('newsletter_consent')}{' '}
                             <a href="/tietosuoja" className="underline underline-offset-2 hover:text-fg">{s('footer_privacy')}</a>

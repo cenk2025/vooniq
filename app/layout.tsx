@@ -55,12 +55,11 @@ export const metadata: Metadata = {
     "data science consulting",
     "AI strategy",
     "digital transformation",
-    "Voon IQ",
-    "Voon Oy"
+    "VOON IQ"
   ],
   authors: [{ name: "Voon IQ" }],
   creator: "Voon IQ",
-  publisher: "Voon Oy",
+  publisher: "VOON IQ",
   formatDetection: {
     email: false,
     address: false,

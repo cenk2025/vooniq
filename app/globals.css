@@ -36,7 +36,7 @@
   --fg-3: #86868b;
   --line: #d2d2d7;
   --fill: rgba(0, 0, 0, 0.05);
-  --brand: #e8264f;
+  --brand: #d81b47;
   --grad: linear-gradient(90deg, #fb2b3b, #fd4180);
   --ease: cubic-bezier(0.28, 0.11, 0.32, 1);
 }
