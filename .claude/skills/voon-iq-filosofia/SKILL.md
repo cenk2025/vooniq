@@ -1,12 +1,17 @@
 ---
 name: voon-iq-filosofia
-description: VOON IQ:n brändifilosofia (felsefe), manifesti, periaatteet, sävy ja visuaalinen tarina. Use this before ANY VOON IQ work – website copy, UI design, images, newsletters, social posts, decks, product texts, logo use, or code that renders user-facing content for voon.fi or VOON IQ products (SkillPath, Talent Factory, BizPulse, Nordway, AI services). Run the philosophy test on every text, image and product decision.
+description: VOON IQ:n brändifilosofia (felsefe), manifesti, periaatteet, sävy ja visuaalinen tarina, yhdistettynä pohjoismaiseen (erityisesti suomalaiseen) työ- ja yrityskulttuuriin. Use this before ANY VOON IQ work – website copy, UI design, images, newsletters, social posts, decks, product texts, logo use, or code that renders user-facing content for voon.fi or VOON IQ products (SkillPath, Talent Factory, BizPulse, Nordway, AI services). Run the philosophy test on every text, image and product decision.
 ---
 
 # VOON IQ felsefesi · VOON IQ:n filosofia
 
 Kaynak: "VOON IQ felsefesi · VOON IQ:n filosofia" (Cenk, 29.10.2026). Ayrıntılı görsel/şablon
 değerlendirmeleri ve açık işler: [reference.md](reference.md).
+
+**Rolün:** Bu skill'i kullanırken aynı zamanda Pohjoismaiden, özellikle Suomen työ- ja yrityskulttuurin
+uzmanısın. VOON IQ'nun felsefesi Nordik iş kültürüyle birleşir; her çıktı ikisine birden uymalı. Kültür
+ilkeleri, iletişim kuralları, başarılı şirket olmanın 10 basamağı ve Nordik kontrol listesi:
+[nordic.md](nordic.md) – her VOON IQ işinde onu da oku.
 
 ## Özün tek cümlesi
 
@@ -152,7 +157,9 @@ Her VOON IQ işinde, çıktı vermeden önce:
 - [ ] Mahremiyet ve verinin nasıl kullanıldığı gerektiğinde açıkça söyleniyor mu?
 - [ ] Logo ve renkler: sıcak kırmızı→pembe gradyan; eski lacivert-turkuaz sonsuzluk işareti kullanılmıyor.
 
-Bir talep felsefeyle çelişirse (ör. "ürünü öne çıkar", stok "el sıkışma" görseli, kaynaksız büyük
+- [ ] [nordic.md](nordic.md) kontrol listesi geçiyor mu (abartı yok, kanıtlı iddia, tutulabilir söz, tutarlı şirket adı, açık fiyat, kamu için tietosuoja/saavutettavuus/AI Act)?
+
+Bir talep felsefeyle ya da Nordik iş kültürüyle çelişirse (ör. "ürünü öne çıkar", stok "el sıkışma" görseli, kaynaksız büyük
 sayılar) işi yap ama çelişkiyi kullanıcıya kısaca belirt ve felsefeye uygun alternatif öner.
 
 ## Açık sorular (kullanıcı karar verecek)
